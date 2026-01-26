@@ -2,9 +2,11 @@ import {Box, Typography, Button, Stack, Divider, TextField, Checkbox, FormContro
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo2.png";
 import Googlelogo from "../../assets/google.png";
-import { useState, useEffect, isValidElement } from "react";
+import { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
-import { Snackbar, Alert } from "@mui/material";
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+
 
 function Signup(){
 
@@ -12,12 +14,15 @@ function Signup(){
   const[password, setPassword] = useState("");
   const[email, setEmail] = useState("");
   const[confirmPassword, setConfirmPassword] = useState("");
+  const [mfaEnabled, setMfaEnabled] = useState(false);
 
   const[emailError, setEmailError] = useState("");
   const[usernameError, setUserNameError] = useState("");
   const[passwordError, setPasswordError] = useState("");
   const[confirmPasswordError, setConfirmPasswordError] = useState("");
   const[passwordRequirements, setPasswordRequirements] = useState(false);
+
+  const navigate = useNavigate();
 
 
   const validateInputs = () => {
@@ -78,18 +83,43 @@ function Signup(){
     const isValid = validateInputs();
     if (!isValid) {
       return; // prevent submit if invalid inputs
-    }else{
-      toast.success("Account created successfully.")
     }
+
+    try {
+        const response = await axios.post("http://localhost:8080/EventApi/authentication/registration", {
+          username, email, password, mfaEnabled,
+        })
+        toast.success("Account Successfully Created.");
+        
+
+        // Check if two-fa enabled, if true then return QR code
+        if (response.data.mfaEnabled && response.data.secretQrCode) {
+          
+          navigate('/twofaqr', {
+            state: {
+              email,
+              qrCode: response.data.secretQrCode,
+             
+            },
+          });
+
+        } else {
+         
+          navigate("/mainpage");
+        }
+                
+       } catch (error) {
+        console.log("Full error:", error.response);
+        if (error.response && error.response.data && error.response.data.message) {
+            toast.error(error.response.data.message);  // Show the backend message error
+        } else {
+            toast.error("Registration failed! Error.");
+        }
+        
+       }
 
   }
   
-
-
-
-
-
-
 
 
   return (
@@ -225,6 +255,8 @@ function Signup(){
            sx={{color: "black"}}
             control={
               <Checkbox
+                checked={mfaEnabled}
+                onChange={(e) => setMfaEnabled(e.target.checked)}
                 sx={{padding: "0", pr: "2px"}}           
                 color="primary"
               />
