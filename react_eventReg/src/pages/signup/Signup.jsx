@@ -64,6 +64,7 @@ function Signup(){
     // ---- Confirm Password ----
     if(!confirmPassword){
       setConfirmPasswordError("Confirm password is required.")
+      isValid = false;
     } else if(confirmPassword !== password){
       setConfirmPasswordError("Password do not match.")
       isValid = false;
@@ -98,7 +99,7 @@ function Signup(){
           navigate('/twofaqr', {
             state: {
               email,
-              qrCode: response.data.secretQrCode,
+              twoFaQr: response.data.secretQrCode,
              
             },
           });

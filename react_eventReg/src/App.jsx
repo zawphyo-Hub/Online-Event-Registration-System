@@ -3,8 +3,10 @@ import { ToastContainer } from "react-toastify";
 import Home from "./pages/home/Home";
 import Login from "./pages/signin/Login";
 import Signup from "./pages/signup/Signup";
-import TwoFactorQr from "./pages/mfa_authentication/TwoFactotQr";
+import TwoFactorQr from "./pages/mfa_authentication/TwoFactorQrImage";
 import MainPage from "./pages/home/MainPage";
+import TotpVerification from "./pages/mfa_authentication/TotpVerification";
+import TwoFactorQrImage from "./pages/mfa_authentication/TwoFactorQrImage";
 function App() {
 
     return(
@@ -17,6 +19,8 @@ function App() {
                 <Route path="/signup" element={<Signup/>} />
                 <Route path="/twofaqr" element={<TwoFactorQr/>} />
                 <Route path="/mainpage" element={<MainPage/>} />
+                <Route path="/totpverify" element={<TotpVerification/>} />
+                <Route path="/twofaqr" element={<TwoFactorQrImage/>} />
                 
                 
             </Routes>

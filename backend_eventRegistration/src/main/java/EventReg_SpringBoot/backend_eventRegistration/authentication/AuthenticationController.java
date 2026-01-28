@@ -20,4 +20,21 @@ public class AuthenticationController {
 
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationReponse> login(
+            @RequestBody LoginRequest loginRequest){
+        var response = authenticationService.login(loginRequest);
+        return ResponseEntity.ok(response);
+
+    }
+
+    @PostMapping("/verification")
+    public ResponseEntity<?> verificationCode(
+            @RequestBody VerifyLoginRequest verifyLoginRequest){
+        return ResponseEntity.ok(authenticationService.verificationCode(verifyLoginRequest));
+
+    }
+
+
+
 }

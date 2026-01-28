@@ -28,8 +28,8 @@ public class TwoFAService {
                 .secret(secret)
                 .issuer("Event Registration Platform")
                 .algorithm(HashingAlgorithm.SHA1)
-                .digits(6) // length of TOTP digits
-                .period(30) //30s for TOTP code expiry
+                .digits(6) // 6 digits
+                .period(30) //30s default for TOTP code expiry
                 .build();
 
         QrGenerator qrGenerator = new ZxingPngQrGenerator(); // from dependencies
@@ -45,13 +45,15 @@ public class TwoFAService {
 
 
     //check totp valid, expired or invalid
-    public boolean isTotpValid(String secret, String code){
+    public boolean isTotpValid(String secretKey, String code){
         TimeProvider timeProvider = new SystemTimeProvider();
         CodeGenerator codeGenerator = new DefaultCodeGenerator();
-        CodeVerifier codeVerifier = new DefaultCodeVerifier( codeGenerator, timeProvider);
-        return codeVerifier.isValidCode(secret, code);
+        DefaultCodeVerifier codeVerifier = new DefaultCodeVerifier( codeGenerator, timeProvider);
+
+        return codeVerifier.isValidCode(secretKey, code);
 
     }
+
 
     public boolean isTotpNotValid(String secret, String code){
 

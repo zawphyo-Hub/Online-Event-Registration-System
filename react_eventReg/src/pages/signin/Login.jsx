@@ -2,8 +2,91 @@ import {Box, Typography, Button, Stack, Divider, TextField} from "@mui/material"
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo2.png";
 import Googlelogo from "../../assets/google.png";
+import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 function Login() {
+
+  const[emailError, setEmailError] = useState("");
+  
+  const[passwordError, setPasswordError] = useState("");
+  
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+
+  const validateInputs = () => {
+    let isValid = true;
+
+   
+    // ---- Email Error Message ----
+    if(!email){
+      setEmailError("Email is required.");
+      isValid = false;
+    }
+    else{
+      setEmailError("");
+    }
+
+    // ---- Password Error ----
+    if (!password) {
+      setPasswordError("Password is required.");
+      isValid = false;
+    } 
+    else {
+      setPasswordError("");
+    }
+  return isValid;
+
+  }
+
+  const handleLogin = async (event) => {
+
+     
+      event.preventDefault();
+      
+      const isValid = validateInputs();
+
+      if (!isValid) {
+        return;
+      }
+      
+      
+      try {
+        const response =  await axios.post('http://localhost:8080/EventApi/authentication/login', 
+          {email, password});
+
+                
+        if (response.data.mfaEnabled) {
+          
+          navigate("/totpverify", { state: { email } }); // send email
+        } 
+        else {
+          
+          toast.success("Login successful!");
+          navigate("/mainpage");
+
+          
+        }
+       
+        
+    } catch (error) {
+      
+       if(error.response && error.response.data && error.response.data.message){
+          toast.error(error.response.data.message)
+       }else{
+          toast.error("Login Failed! Error.")
+
+       }
+       
+    }
+    };
+
+
+
+
   return (
     <Box
       sx={{
@@ -33,56 +116,73 @@ function Login() {
             src={logo}
             alt="Platform logo"
             sx={{ height: 32 }}
+            
           />
         </Box>
 
+        <Box
+          component="form"
+          onSubmit={handleLogin}
+        >
 
-        {/* Form */}
-        <Stack spacing={2}>
-          <TextField
-            label="Email"
-            placeholder="example@gmail.com"
+          
+
+
+          {/* Form */}
+          <Stack spacing={2}>
+            <TextField
+              label="Email"
+              placeholder="example@gmail.com"
+              value={email}
+              helperText={emailError}
+              error={Boolean(emailError)}
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+            />
+
+            <TextField
+              label="Password"
+              type="password"
+              helperText={passwordError}
+              error={Boolean(passwordError)}
+              placeholder="Enter your password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              fullWidth
+            />
+          </Stack>
+
+          {/* Forgot password */}
+          <Box sx={{ textAlign: "right", mt: 1 }}>
+            <Typography
+              component={Link}
+              to="/forgot-password"
+              sx={{
+                fontSize: 14,
+                color: "black",
+                
+              }}
+            >
+              Forgot your password?
+            </Typography>
+          </Box>
+
+          {/* Sign in button */}
+          <Button
+            variant="contained"
+            type="submit"
             fullWidth
-          />
-
-          <TextField
-            label="Password"
-            type="password"
-            placeholder="Enter your password"
-            fullWidth
-          />
-        </Stack>
-
-        {/* Forgot password */}
-        <Box sx={{ textAlign: "right", mt: 1 }}>
-          <Typography
-            component={Link}
-            to="/forgot-password"
             sx={{
-              fontSize: 14,
-              color: "black",
+              mt: 3,
+              py: 1.2,
+              fontSize: "14px",
               
+              bgcolor: "#572c67"
             }}
           >
-            Forgot your password?
-          </Typography>
+            Sign in
+          </Button>
         </Box>
-
-        {/* Sign in button */}
-        <Button
-          variant="contained"
-          
-          fullWidth
-          sx={{
-            mt: 3,
-            py: 1.2,
-            fontSize: "14px",
-            
-            bgcolor: "#572c67"
-          }}
-        >
-          Sign in
-        </Button>
 
         
         <Divider sx={{ my: 2, fontFamily: "sans-serif" }}>Or</Divider>
