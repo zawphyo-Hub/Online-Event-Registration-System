@@ -1,9 +1,12 @@
+import { Box, Typography } from "@mui/material";
+import Navbar from "../navbar/Navbar";
+
 function MainPage(){
     return(
-        <div>
-            <h1>Main page</h1>
-
-        </div>
+        <Box>
+            <Navbar />
+            <Typography>Hello</Typography>
+        </Box>
     )
     
 

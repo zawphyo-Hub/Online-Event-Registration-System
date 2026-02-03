@@ -38,6 +38,8 @@ public class User implements UserDetails {
     private Boolean mfaEnabled;
     private String secretKey2FA;
 
+    private Boolean isMfaVerified;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
