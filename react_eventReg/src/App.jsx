@@ -11,6 +11,7 @@ import EventCreation from "./pages/create-event-process/EventCreationOptions";
 import EventCreationOptions from "./pages/create-event-process/EventCreationOptions";
 import ScratchCreation from "./pages/create-event-process/ScratchCreation";
 import AIAssistant from "./pages/create-event-process/AIAssistant";
+import Templates from "./pages/event-template/template";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/event-creation" element={<EventCreationOptions/>} />
                 <Route path="/scratch-creation" element={<ScratchCreation/>} />
                 <Route path="/ai-assistant" element={<AIAssistant/>} />
+                <Route path="/templates" element={<Templates/>} />
                 
                 
                 

@@ -33,13 +33,14 @@ public class Event {
     private String description;
 
     private String location;
+    private Double location_lat;
+    private Double location_lng;
 
     private LocalDate start_date;
-    private LocalDate end_date;
+
 
     private LocalTime start_time;
     private LocalTime end_time;
-
 
     private String event_image_url;
 

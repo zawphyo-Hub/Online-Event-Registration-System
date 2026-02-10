@@ -24,14 +24,14 @@ public class GlobalException {
         return new ResponseEntity<>(errorDetails, ex.getStatusCode());
     }
 
-    //BadCredentialsException (username/password or OTP are incorrect.)
+    //BadCredentialsException (username/password, etc.)
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentials(BadCredentialsException ex) {
         Map<String, Object> errorDetails = new HashMap<>();
         errorDetails.put("timestamp", LocalDateTime.now());
         errorDetails.put("status", HttpStatus.UNAUTHORIZED.value());
         errorDetails.put("error", "Unauthorized");
-        errorDetails.put("message", ex.getMessage()); // "OTP Code incorrect!!"
+        errorDetails.put("message", ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
 

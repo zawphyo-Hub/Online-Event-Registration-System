@@ -20,6 +20,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/EventApi/authentication/**").permitAll()
+                        .requestMatchers("/event-registration/events/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
