@@ -11,7 +11,11 @@ import EventCreation from "./pages/create-event-process/EventCreationOptions";
 import EventCreationOptions from "./pages/create-event-process/EventCreationOptions";
 import ScratchCreation from "./pages/create-event-process/ScratchCreation";
 import AIAssistant from "./pages/create-event-process/AIAssistant";
-import Templates from "./pages/event-template/template";
+import Templates from "./pages/event-template/TemplateA";
+import TemplateA from "./pages/event-template/TemplateA";
+import TestingTemplate from "./pages/event-template/TestingTemplate";
+import TemplateSelection from "./pages/event-template/TemplateSelection";
+import TemplatePreview from "./pages/event-template/TemplatePreview";
 
 function App() {
 
@@ -30,7 +34,11 @@ function App() {
                 <Route path="/event-creation" element={<EventCreationOptions/>} />
                 <Route path="/scratch-creation" element={<ScratchCreation/>} />
                 <Route path="/ai-assistant" element={<AIAssistant/>} />
-                <Route path="/templates" element={<Templates/>} />
+                <Route path="/templateA" element={<TemplateA/>} />
+
+                <Route path="/layoutA" element={<TestingTemplate/>} />
+                <Route path="/template-selection" element={<TemplateSelection/>} />
+                <Route path="/template-preview/:template_id" element={<TemplatePreview/>} />
                 
                 
                 
@@ -43,4 +51,4 @@ function App() {
  
 }
 
-export default App
+export default App;

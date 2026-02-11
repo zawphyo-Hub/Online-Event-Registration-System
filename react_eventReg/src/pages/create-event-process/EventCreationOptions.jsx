@@ -20,7 +20,7 @@ function EventCreationOptions(){
             }}>
                 <Button
                 component={Link}
-                to="/scratch-creation"
+                to="/template-selection"
                 sx={{color: "#000000", backgroundColor: "white"}}
                 
                 >

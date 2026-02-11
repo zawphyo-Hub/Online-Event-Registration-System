@@ -151,7 +151,7 @@ function ScratchCreation() {
 
         
         toast.success("Event has been created.")
-        navigate("/templates")
+        navigate("/templateA")
         
 
       } catch (error) {

@@ -21,6 +21,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/EventApi/authentication/**").permitAll()
                         .requestMatchers("/event-registration/events/**").permitAll()
+                        .requestMatchers("/templates/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
