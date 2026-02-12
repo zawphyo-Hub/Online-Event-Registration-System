@@ -26,7 +26,9 @@ function TotpVerification(){
             verificationCode,
         });
 
-        
+            // Store user info in localStorage
+            localStorage.setItem("user", JSON.stringify(res.data));
+            
             toast.success("Verification successful.");
             
             navigate("/mainpage");

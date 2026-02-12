@@ -5,13 +5,24 @@ import {APIProvider, Map, AdvancedMarker, Pin} from "@vis.gl/react-google-maps";
 import GoogleMapLocation from "./GoogleMapLocation";
 import axios from "axios";
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function ScratchCreation() {
 
   const navigate = useNavigate();
+
+  // user id from local storage
+  const loginUser = JSON.parse(localStorage.getItem("user"));
+  const userId = loginUser?.userId; 
+
+  
+  // Carry Template ID
+  const location = useLocation();
+  const template_id = location.state?.template_id;
+  const template_name = location.state?.template_name;
     
     const [eventInfo, setEventInfo] = useState({
+      
       event_title: "",
       description: "",
       location: {
@@ -24,13 +35,15 @@ function ScratchCreation() {
       
       start_time: "",
       end_time: "",
-      event_image_url: "",
+      event_image_url: ""
+      
       
     });
+    
 
     const [errors, setErrors] = useState({});
 
-
+    
     const mapRef = useRef(null);
     const inputRef = useRef(null);
     
@@ -61,6 +74,8 @@ function ScratchCreation() {
           ...prev,
           event_image_url: imageUrl,
         }));
+   
+
 
         console.log("Uploaded Successfully.");
       } catch (err) {
@@ -76,6 +91,14 @@ function ScratchCreation() {
         [e.target.name]: e.target.value,
       });
     };
+
+
+    // if template id == null
+    useEffect(() => {
+      if (!template_id) {
+        navigate("/template-selection");
+      }
+    }, [template_id, navigate]);
 
     const validateInputs = () => {
     const newErrors = {};
@@ -135,6 +158,10 @@ function ScratchCreation() {
       try {
 
         const payLoadEventInfo = {
+          template: {
+            template_id: template_id
+          },
+          user: { userID: userId },
           event_title: eventInfo.event_title,
           description: eventInfo.description,
           location: eventInfo.location.address,
@@ -144,6 +171,7 @@ function ScratchCreation() {
           start_time: eventInfo.start_time,
           end_time: eventInfo.end_time,
           event_image_url: eventInfo.event_image_url || null
+          
         };
         
         const res = await axios.post("http://localhost:8080/event-registration/events/createEvents", 
@@ -151,7 +179,8 @@ function ScratchCreation() {
 
         
         toast.success("Event has been created.")
-        navigate("/templateA")
+        navigate(`/event-preview/${res.data.slug}`)
+
         
 
       } catch (error) {
@@ -190,9 +219,25 @@ function ScratchCreation() {
               gap: 4,
             }}
           >
-            {/* <Typography variant="h6" textAlign="center">
-              Create Event
-            </Typography> */}
+          <Box
+            sx={{
+              backgroundColor: "#f4f0f7",
+              
+              p: 1,
+              borderRadius: 2,
+              m: "0"
+            }}
+          >
+          <Typography variant="body2" sx={{ color: "gray" }}>
+            Selected Template
+          </Typography>
+
+          <Typography  sx={{ fontWeight: "bold", fontSize: "15px" }}>
+            {template_name}
+          </Typography>
+        </Box>
+
+
 
             <FormControl>
               <FormLabel 

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 
 function TemplateSelection() {
@@ -33,13 +34,14 @@ function TemplateSelection() {
     navigate(`/template-preview/${template_id}`);
   };
 
+  
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" mb={3} textAlign="center">
         Choose a Template
       </Typography>
 
-      
+            
       <Grid
         container
         spacing={4}

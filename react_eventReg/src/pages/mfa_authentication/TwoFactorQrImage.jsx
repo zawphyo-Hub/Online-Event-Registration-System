@@ -24,7 +24,10 @@ function TwoFactorQrImage(){
         email,
         verificationCode,
       });
-      
+
+        // Store user info in localStorage
+        localStorage.setItem("user", JSON.stringify(res.data));
+              
         toast.success("Two-Factor Authentication has been activated.");
          
         navigate("/mainpage");

@@ -58,6 +58,8 @@ function Login() {
         const response =  await axios.post('http://localhost:8080/EventApi/authentication/login', 
           {email, password});
 
+         
+
                 
         if (response.data.mfaEnabled) {
           
@@ -65,6 +67,10 @@ function Login() {
         } 
         else {
           
+          // store user info in local storage
+          localStorage.setItem("user", JSON.stringify(response.data));
+          console.log("Stored user:", JSON.parse(localStorage.getItem("user")));
+
           toast.success("Login successful!");
           navigate("/mainpage");
 

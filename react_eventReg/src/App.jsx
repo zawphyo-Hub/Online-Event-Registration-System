@@ -16,6 +16,8 @@ import TemplateA from "./pages/event-template/TemplateA";
 import TestingTemplate from "./pages/event-template/TestingTemplate";
 import TemplateSelection from "./pages/event-template/TemplateSelection";
 import TemplatePreview from "./pages/event-template/TemplatePreview";
+import EventPreview from "./pages/events-preview/EventPreview";
+import Profile from "./pages/userProfile/Profile";
 
 function App() {
 
@@ -39,6 +41,8 @@ function App() {
                 <Route path="/layoutA" element={<TestingTemplate/>} />
                 <Route path="/template-selection" element={<TemplateSelection/>} />
                 <Route path="/template-preview/:template_id" element={<TemplatePreview/>} />
+                <Route path="/event-preview/:slug" element={<EventPreview/>} />
+                <Route path="/profile" element={<Profile/>} />
                 
                 
                 

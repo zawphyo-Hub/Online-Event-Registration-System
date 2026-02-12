@@ -46,6 +46,7 @@ public class AuthenticationService {
 
         userRepository.save(user);
         return AuthenticationReponse.builder()
+                .userId(user.getUserID())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .secretQrCode(twoFAService.generateQrCode(user.getSecretKey2FA()))
@@ -73,16 +74,20 @@ public class AuthenticationService {
                 () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or Password Incorrect.")
         );
 
+        System.out.println("DB username: " + user.getUsername());
+        System.out.println("DB email: " + user.getEmail());
         if (user.getMfaEnabled()){ //if mfa enable
             return AuthenticationReponse.builder()
-
+                    .userId(user.getUserID())
+                    .email(user.getEmail())
+                    .username(user.getUsername())
                     .mfaEnabled(true) //frontend will check this to decide what to do next
                     .build();
 
         }
 
         return AuthenticationReponse.builder()
-
+                .userId(user.getUserID())
                 .mfaEnabled(false)
                 .email(user.getEmail())
                 .username(user.getUsername())
@@ -107,10 +112,14 @@ public class AuthenticationService {
             throw new BadCredentialsException("Verification Code Incorrect.");
         }
 
+        System.out.println("Secret from DB: " + user.getSecretKey2FA());
+        System.out.println("Code entered: " + code);
+
         return AuthenticationReponse.builder()
                 .mfaEnabled(user.getMfaEnabled())
                 .email(user.getEmail())
                 .username(user.getUsername())
+                .userId(user.getUserID())
                 .build();
 
 

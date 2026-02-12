@@ -1,5 +1,9 @@
 package EventReg_SpringBoot.backend_eventRegistration.event;
 
+import EventReg_SpringBoot.backend_eventRegistration.template.Template;
+import EventReg_SpringBoot.backend_eventRegistration.template.TemplateRepository;
+import EventReg_SpringBoot.backend_eventRegistration.user.User;
+import EventReg_SpringBoot.backend_eventRegistration.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +12,8 @@ import org.springframework.stereotype.Service;
 public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
+    private final TemplateRepository templateRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Event getEventById(Long id) {
@@ -26,8 +32,24 @@ public class EventServiceImpl implements EventService{
     @Override
     public Event createEvent(Event event) {
 
+        // template ID saved
+        if (event.getTemplate() != null && event.getTemplate().getTemplate_id() != null) {
+
+            Template template = templateRepository
+                    .findById(event.getTemplate().getTemplate_id())
+                    .orElseThrow(() -> new RuntimeException("Template not found"));
+
+            event.setTemplate(template);
+        }
+
+        if (event.getUser() != null && event.getUser().getUserID() != null) {
+            User user = userRepository.findById(event.getUser().getUserID())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            event.setUser(user);
+        }
+
         event.setSlug(
-                generateEventSlug(event.getEvent_title()) + "-" + eventRepository.save(event).getEvent_id()
+                generateEventSlug(event.getEvent_title()) + "-" + eventRepository.save(event).getEventId()
         );
         event.setStatus(EventStatus.DRAFT);
         return eventRepository.save(event);

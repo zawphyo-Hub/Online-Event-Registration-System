@@ -90,7 +90,8 @@ function Signup(){
         const response = await axios.post("http://localhost:8080/EventApi/authentication/registration", {
           username, email, password, mfaEnabled,
         })
-        
+
+            
         
 
         // Check if two-fa enabled, if true then return QR code
@@ -105,6 +106,9 @@ function Signup(){
           });
 
         } else {
+            // Store user info in localStorage
+          localStorage.setItem("user", JSON.stringify(response.data));
+          console.log("Stored user:", JSON.parse(localStorage.getItem("user")));
           toast.success("Account Successfully Created.");
           navigate("/mainpage");
         }

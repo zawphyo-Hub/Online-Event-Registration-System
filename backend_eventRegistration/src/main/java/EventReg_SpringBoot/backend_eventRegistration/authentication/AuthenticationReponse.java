@@ -13,6 +13,7 @@ public class AuthenticationReponse {
 
     private String email;
     private String username;
+    private long userId;
     private Boolean mfaEnabled;
     private String secretQrCode;
 }

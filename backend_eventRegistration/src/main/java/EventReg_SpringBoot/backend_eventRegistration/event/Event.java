@@ -1,5 +1,6 @@
 package EventReg_SpringBoot.backend_eventRegistration.event;
 
+import EventReg_SpringBoot.backend_eventRegistration.template.Template;
 import EventReg_SpringBoot.backend_eventRegistration.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,11 +22,17 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long event_id;
+    @Column(name = "event_id")
+    private Long eventId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "template_id")
+    private Template template;
+
 
     private String event_title;
 
