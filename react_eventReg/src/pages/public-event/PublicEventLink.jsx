@@ -1,76 +1,52 @@
-import { Box, Typography, Divider, Button, Link } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
+import { Box, Typography, Divider, Button} from "@mui/material";
 import dateIcon from "../../assets/date.png";
 import timeIcon from "../../assets/time.png";
 import locationIcon from "../../assets/address.png";
-import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
+import { Link } from "react-router-dom";
 
-import { toast } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
-
-
-function EventPreview(){
+function PublicEventLink() {
   const { slug } = useParams();
   const [event, setEvent] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
         const res = await axios.get(
           `http://localhost:8080/event-registration/events/getSlug/${slug}`
+          
         );
         setEvent(res.data);
-        
-      } catch (error) {
-        console.error("Failed to fetch event");
+      } catch (err) {
+        console.error("Error fetching event.");
       }
     };
 
     fetchEvent();
   }, [slug]);
 
-  const handlePublishButton = async () => {
-    try {
-      const res = await axios.post(
-        `http://localhost:8080/event-registration/events/publishEvent/${event.eventId}`
-      );
-
-      toast.info(
-        <div style={{padding: "5px", height: "30px", width: "300px"}}>
-     
-          "Please wait while we are publishing your event..."
-        </div>
-       
-    );
-
-    setTimeout(() => {
-      navigate(`/success-public/${slug}`);
-    }, 2000);
-      
-    } catch (err) {
-      toast.error("Failed to publish event.");
-    }
-  };
-
   if (!event) 
   return (
       <Box 
-      sx={{fontSize: "17px", display: "flex",
+      sx={{fontFamily: "sans-serif", fontSize: "17px", display: "flex",
         justifyContent: "center", mt: "30px", color: "red"
+        
       }}
-      >Loading....
+      >Loading...
       </Box>
     )
 
   const template = event.template || {};
 
   return (
+    <Box >
     <Box
       sx={{
-                
+        fontFamily: template.font_family,
+        backgroundColor: "white",
         maxWidth: 700,
         mx: "auto",
         my: 4,
@@ -153,23 +129,21 @@ function EventPreview(){
 
             </Box>
             )}
+
+            <Button  component={Link} to={`/attendee-reg/${slug}`}
+            sx={{ mt: "25px", fontSize: 16, color: "white", bgcolor: "#3a9ad6"}}
+            >
+                Register for event
+            </Button>
+
             
         </Box>
 
-        <Divider sx={{ mt: 3}} />
-        
-        <Button
-          variant="contained"
-          sx={{ mt: 3, bgcolor: "#3a9ad6"}}
-          onClick={handlePublishButton}
-        >
-          Publish Event
-        </Button>
-      
-
-
+       
       </Box>
+    </Box>
     </Box>
   );
 }
-export default EventPreview;
+
+export default PublicEventLink;

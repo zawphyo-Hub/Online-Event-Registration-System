@@ -1,6 +1,6 @@
 import {Box, Typography, Button, Stack, Divider, TextField, Checkbox, FormControl, FormLabel, FormControlLabel} from "@mui/material";
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo2.png";
+import logo from "../../assets/logo3.png";
 import Googlelogo from "../../assets/google.png";
 import { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
@@ -131,7 +131,7 @@ function Signup(){
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(to top, #20002c, #cbb4d4)",
+        backgroundImage: "radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -285,7 +285,7 @@ function Signup(){
             py: 1.2,
             fontSize: "14px",
             
-            bgcolor: "#572c67"
+            bgcolor: "#3a9ad6"
           }}
         >
           Create Account

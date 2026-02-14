@@ -53,7 +53,7 @@ function TemplatePreview() {
     <Box
       sx={{
         fontFamily: template.font_family,
-        backgroundColor: template.background_color,
+        
         maxWidth: 900,
         mx: "auto",
         my: 4,

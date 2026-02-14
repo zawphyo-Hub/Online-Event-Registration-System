@@ -192,17 +192,22 @@ function ScratchCreation() {
 
 
   return (
-      <Box sx={{background: "linear-gradient(to top, #20002c, #cbb4d4)", }}>
+      <Box sx={{ display: "flex",justifyContent: "center",
+            alignItems: "center", m: "20px"}}>
         
 
         <Box
           sx={{
                       
             display: "flex",
-            p: "40px",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "auto"
+            p: "10px",
+            
+            height: "auto",
+            boxShadow: 2,
+            borderRadius: 3,
+            overflow: "hidden"
+            
+
           }}
         >
           
@@ -435,7 +440,8 @@ function ScratchCreation() {
             </FormControl>
 
           
-            <FormControl>
+          {/* this is for uploading image to cloudinary */}
+            {/* <FormControl>
               <FormLabel 
               sx={{color: "black", fontFamily: "sans-serif", fontWeight: "bold", fontSize: "16px", pb: "10px"}}
               >
@@ -448,12 +454,12 @@ function ScratchCreation() {
                 onChange={handleUploadImage}
                               
               />
-            </FormControl>
+            </FormControl> */}
           
             
             <Button 
               type="submit" variant="contained"
-              sx={{bgcolor: "#572c67"}}
+              sx={{bgcolor: "#3a9ad6"}}
               
             >
               Create Event

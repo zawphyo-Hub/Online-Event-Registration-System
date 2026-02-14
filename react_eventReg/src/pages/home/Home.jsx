@@ -1,12 +1,12 @@
 import { Box, Button, Typography, Stack, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
-import logo from '../../assets/logo2.png';
+import logo from '../../assets/logo3.png';
 
 
 function Home() {
   return (
 
-    <Box sx={{background: "linear-gradient(to top, #20002c, #cbb4d4)"}}>
+    <Box sx={{backgroundImage: "radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);"}}>
       
       <Box sx={{ mb: 1.5, display: "flex", p: "15px", background: "white",  }}>
         <Box
@@ -14,13 +14,11 @@ function Home() {
           src={logo}
           alt="Platform logo"
           sx={{
-            height: "35px",
+            height: "40px",
             width: "auto"            
           }}
         />
-        <Typography sx={{display: "flex", alignItems: "center", fontFamily: "sans-serif", 
-        fontWeight: "bold"}}
-        >Event</Typography>
+       
       </Box>
   
     
@@ -76,7 +74,7 @@ function Home() {
         <Divider
             orientation="vertical"
             flexItem
-            sx={{ borderColor: "#572c67"}}
+            sx={{ borderColor: "#3a9ad6"}}
         />
           
             
@@ -105,12 +103,12 @@ function Home() {
 
               <Stack spacing={2}>
                 <Button variant="contained" size="large" component={Link} to="/login"
-                sx={{bgcolor: "#572c67"}}>
+                sx={{bgcolor: "#3a9ad6"}}>
                   Login
                 </Button>
 
                 <Button variant="outlined" size="large" component={Link} to="/signup" 
-                sx={{borderColor: "#3e164d", color: "#3e164d"}}>
+                sx={{borderColor: "#3a9ad6", color: "#3a9ad6"}}>
                   Sign Up
                 </Button>
               </Stack>

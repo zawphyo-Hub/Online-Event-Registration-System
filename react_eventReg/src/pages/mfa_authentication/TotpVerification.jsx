@@ -3,7 +3,7 @@ import { TextField, Button, Typography, Box } from '@mui/material';
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from "axios";
-import logo from "../../assets/logo2.png";
+import logo from "../../assets/logo3.png";
 
 
 function TotpVerification(){
@@ -51,7 +51,7 @@ function TotpVerification(){
     return(
        
         <Box 
-         sx={{background: "linear-gradient(to top, #20002c, #cbb4d4)", 
+         sx={{backgroundImage: "radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);",
             minHeight: "100vh",
             textAlign: "center", 
             display: "flex", 
@@ -75,6 +75,7 @@ function TotpVerification(){
             >
                 <Box sx={{ display: "flex",
                     alignItems: "center",
+                    justifyContent: "space-between",
                     gap: "5px",
                     mb: 3 }}
                 >
@@ -82,7 +83,7 @@ function TotpVerification(){
                         component="img"
                         src={logo}
                         alt="Platform logo"
-                        sx={{ height: 25 }}
+                        sx={{ height: "30px" }}
                         
                       />
                       <Typography
@@ -90,10 +91,10 @@ function TotpVerification(){
                         sx={{
                         fontWeight: 600,
                         fontSize: "13px",
-                        color: "#13b977"
+                        color: "#8b8b8b"
                         }}
                     >
-                        Second-Step Authentication
+                        Multi-Authentication
                     </Typography>
                 </Box>
                 <Typography sx={{mt: "15px"}}>
@@ -123,7 +124,7 @@ function TotpVerification(){
                     <Button 
                     variant="contained" 
                     onClick={handleVerify}
-                    sx={{bgcolor: "#572c67",
+                    sx={{bgcolor: "#3a9ad6",
                 
                         
                         

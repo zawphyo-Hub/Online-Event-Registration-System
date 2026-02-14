@@ -3,9 +3,12 @@ import Navbar from "../navbar/Navbar";
 
 function MainPage(){
     return(
-        <Box>
+        <Box >
             <Navbar />
-            <Typography>Hello</Typography>
+            <Typography>Hello. This is home Page. </Typography>
+            
+            
+           
         </Box>
     )
     

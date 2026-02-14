@@ -36,7 +36,7 @@ function TemplateSelection() {
 
   
   return (
-    <Box sx={{ p: 4 }}>
+    <Box sx={{ p: 4,  }}>
       <Typography variant="h4" mb={3} textAlign="center">
         Choose a Template
       </Typography>
@@ -92,8 +92,9 @@ function TemplateSelection() {
 
               <CardActions>
                 <Button
+                sx={{bgcolor: "#3a9ad6", color: "white"}}
                   fullWidth
-                  variant="contained"
+                  
                   onClick={() => handleSelect(template.template_id)}
                 >
                   Select Template

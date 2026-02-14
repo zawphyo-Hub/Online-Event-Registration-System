@@ -7,17 +7,17 @@ import TwoFactorQr from "./pages/mfa_authentication/TwoFactorQrImage";
 import MainPage from "./pages/home/MainPage";
 import TotpVerification from "./pages/mfa_authentication/TotpVerification";
 import TwoFactorQrImage from "./pages/mfa_authentication/TwoFactorQrImage";
-import EventCreation from "./pages/create-event-process/EventCreationOptions";
-import EventCreationOptions from "./pages/create-event-process/EventCreationOptions";
+
 import ScratchCreation from "./pages/create-event-process/ScratchCreation";
-import AIAssistant from "./pages/create-event-process/AIAssistant";
-import Templates from "./pages/event-template/TemplateA";
-import TemplateA from "./pages/event-template/TemplateA";
-import TestingTemplate from "./pages/event-template/TestingTemplate";
+
 import TemplateSelection from "./pages/event-template/TemplateSelection";
 import TemplatePreview from "./pages/event-template/TemplatePreview";
 import EventPreview from "./pages/events-preview/EventPreview";
 import Profile from "./pages/userProfile/Profile";
+import EventDashboard from "./pages/dashboard/eventDashboard";
+import PublicEventLink from "./pages/public-event/PublicEventLink";
+import SuccessPublicPage from "./pages/public-event/SuccessPublicPage";
+import AttendeeRegister from "./pages/attendee-registerpage/AttendeeRegister";
 
 function App() {
 
@@ -33,16 +33,20 @@ function App() {
                 <Route path="/mainpage" element={<MainPage/>} />
                 <Route path="/totpverify" element={<TotpVerification/>} />
                 <Route path="/twofaqr" element={<TwoFactorQrImage/>} />
-                <Route path="/event-creation" element={<EventCreationOptions/>} />
+                
                 <Route path="/scratch-creation" element={<ScratchCreation/>} />
-                <Route path="/ai-assistant" element={<AIAssistant/>} />
-                <Route path="/templateA" element={<TemplateA/>} />
-
-                <Route path="/layoutA" element={<TestingTemplate/>} />
+                
+                
                 <Route path="/template-selection" element={<TemplateSelection/>} />
                 <Route path="/template-preview/:template_id" element={<TemplatePreview/>} />
                 <Route path="/event-preview/:slug" element={<EventPreview/>} />
                 <Route path="/profile" element={<Profile/>} />
+                <Route path="/eventDashboard" element={<EventDashboard/>} />
+                <Route path="/agenda/public-event/:slug" element={<PublicEventLink/>} />
+                <Route path="/success-public/:slug" element={<SuccessPublicPage/>} />
+
+                <Route path="/attendee-reg/:slug" element={<AttendeeRegister/>} />
+                
                 
                 
                 

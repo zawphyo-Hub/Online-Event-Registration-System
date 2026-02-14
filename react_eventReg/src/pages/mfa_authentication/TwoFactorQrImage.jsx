@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import logo from "../../assets/logo2.png";
+import logo from "../../assets/logo3.png";
 
 function TwoFactorQrImage(){
   const location = useLocation();
@@ -49,7 +49,7 @@ function TwoFactorQrImage(){
   return (
 
     <Box 
-         sx={{background: "linear-gradient(to top, #20002c, #cbb4d4)", 
+         sx={{backgroundImage: "radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);",
             minHeight: "100vh",
             textAlign: "center", 
             display: "flex", 
@@ -58,42 +58,43 @@ function TwoFactorQrImage(){
          }}
     >
     <Box 
-    
-        sx={
-            {
-            maxWidth: 460,
-                
-            margin: "10px",
-            p:3,
-            backgroundColor: "white",
-            borderRadius: 2,
+      
+    sx={
+        {
+        maxWidth: 460,
             
-            boxShadow: 1}
-            }
-    >
+        margin: "10px",
+        p:3,
+        backgroundColor: "white",
+        borderRadius: 2,
+        
+        boxShadow: 1}
+        }
+      >
         <Box sx={{ display: "flex",
-            alignItems: "center",
-            gap: "5px",
-            mb: 3 }}
-        >
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "5px",
+              mb: 3 }}
+          >
                 <Box
-                    component="img"
-                    src={logo}
-                    alt="Platform logo"
-                    sx={{ height: 25 }}
-                
+                  component="img"
+                  src={logo}
+                  alt="Platform logo"
+                  sx={{ height: "30px" }}
+                  
                 />
                 <Typography
-                
-                sx={{
-                fontWeight: 600,
-                fontSize: "13px",
-                color: "#13b977"
-                }}
-            >
-                Activate Two-Steps Authentication
-            </Typography>
-        </Box>
+                  
+                  sx={{
+                  fontWeight: 600,
+                  fontSize: "13px",
+                  color: "#8b8b8b"
+                  }}
+              >
+                  Activate Multi-Authentication
+              </Typography>
+          </Box>
 
         <Typography sx={{fontSize: "17px"}}>
             Scan this QR code with your authenticator app to enable two-factor authentication.
@@ -119,7 +120,7 @@ function TwoFactorQrImage(){
         </Box>
             <Box sx={{ mt: 2,  }}>
                 <Button variant="contained" onClick={handleVerify} 
-                sx={{bgcolor: "#572c67",
+                sx={{bgcolor: "#3a9ad6",
                     width: "100%"
                 }}>
                 Verify Code

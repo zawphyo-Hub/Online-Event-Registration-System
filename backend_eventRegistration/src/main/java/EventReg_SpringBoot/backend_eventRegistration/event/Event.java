@@ -33,7 +33,6 @@ public class Event {
     @JoinColumn(name = "template_id")
     private Template template;
 
-
     private String event_title;
 
     @Column(columnDefinition = "TEXT")
