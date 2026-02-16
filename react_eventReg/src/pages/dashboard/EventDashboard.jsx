@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Typography, Drawer, List, ListItem, ListItemText, Card, CardContent, CardActions, Button, Chip, Grid, colors } from "@mui/material";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 import { toast } from "react-toastify";
 
@@ -104,16 +104,18 @@ function EventDashboard() {
                 <CardActions>
                   <Button
                     size="small"
+                    component={Link}
                     sx={{bgcolor: "#3a9ad6", color: "white", pl: "10px", pr: "10px", fontSize: "12px"}}
-                    onClick={() => navigate("")}
+                    to={`/attendee-management/${event.eventId}`}
                   >
                     Manage Attendees
                   </Button>
                   <Button
                     size="small"
+                    component={Link}
                     sx={{bgcolor: "#3a9ad6", color: "white", pl: "10px", pr: "10px", fontSize: "12px"}}
+                    to={`/event-preview/${event.slug}`}
                     
-                    onClick={() => navigate(`/event-preview/${event.slug}`)}
                   >
                     Edit Event
                   </Button>

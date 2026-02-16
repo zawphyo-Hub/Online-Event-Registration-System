@@ -21,8 +21,8 @@ public class Attendee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attendee_id;
 
-
-    private String attendee_name;
+    private String firstName;
+    private String lastName;
     private String email;
 
     @ManyToOne

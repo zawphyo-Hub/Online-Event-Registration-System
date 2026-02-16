@@ -22,6 +22,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/EventApi/authentication/**").permitAll()
                         .requestMatchers("/event-registration/events/**").permitAll()
                         .requestMatchers("/templates/**").permitAll()
+                        .requestMatchers("/attendees/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

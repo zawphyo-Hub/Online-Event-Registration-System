@@ -26,7 +26,8 @@ public class AttendeeServiceImpl implements AttendeeService{
     public Attendee updateAttendee(Long id, Attendee attendee) {
         Attendee newAttendee = getAttendeeById(id);
 
-        newAttendee.setAttendee_name(attendee.getAttendee_name());
+        newAttendee.setFirstName(attendee.getFirstName());
+        newAttendee.setLastName(attendee.getLastName());
         newAttendee.setEmail(attendee.getEmail());
 
 

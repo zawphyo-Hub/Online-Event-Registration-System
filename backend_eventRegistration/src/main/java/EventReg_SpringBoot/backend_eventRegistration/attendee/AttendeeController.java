@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/attendee")
+@RequestMapping("/attendees")
 public class AttendeeController {
 
     private final AttendeeService attendeeService;
@@ -18,25 +18,20 @@ public class AttendeeController {
 
 
     // store attendee info using event_slug rather than event_id
-    @PostMapping("/register-attendee/{Slug}")
+    @PostMapping("/register-attendee/{slug}")
     public ResponseEntity<Attendee> registerAttendee(
-            @PathVariable String eventSlug,
+            @PathVariable String slug,
             @RequestBody Attendee attendee
     ) {
-        Event event = eventService.getEventBySlug(eventSlug);
+        Event event = eventService.getEventBySlug(slug);
+
         attendee.setEvent(event);
         Attendee saved = attendeeService.createAttendee(attendee);
         return ResponseEntity.ok(saved);
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Attendee> getAttendee(@PathVariable Long id) {
-        return ResponseEntity.ok(attendeeService.getAttendeeById(id));
-    }
-
-
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Attendee> updateAttendee(
             @PathVariable Long id,
             @RequestBody Attendee attendee
@@ -45,7 +40,7 @@ public class AttendeeController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAttendee(@PathVariable Long id) {
         attendeeService.deleteAttendee(id);
         return ResponseEntity.noContent().build();

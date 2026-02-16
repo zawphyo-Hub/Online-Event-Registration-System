@@ -18,6 +18,7 @@ import EventDashboard from "./pages/dashboard/eventDashboard";
 import PublicEventLink from "./pages/public-event/PublicEventLink";
 import SuccessPublicPage from "./pages/public-event/SuccessPublicPage";
 import AttendeeRegister from "./pages/attendee-registerpage/AttendeeRegister";
+import AttendeeManagement from "./pages/dashboard/AttendeeManagement";
 
 function App() {
 
@@ -46,6 +47,7 @@ function App() {
                 <Route path="/success-public/:slug" element={<SuccessPublicPage/>} />
 
                 <Route path="/attendee-reg/:slug" element={<AttendeeRegister/>} />
+                <Route path="/attendee-management/:eventId" element={<AttendeeManagement/>} />
                 
                 
                 
