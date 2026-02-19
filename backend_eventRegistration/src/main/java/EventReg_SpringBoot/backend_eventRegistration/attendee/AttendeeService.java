@@ -13,4 +13,6 @@ public interface AttendeeService {
     Attendee updateAttendee(Long id, Attendee attendee);
     void deleteAttendee(Long id);
     List<Attendee> getAttendeesByEvent(Long Id);
+    Attendee getAttendeeBySecretKey(String secretKey);
+
 }

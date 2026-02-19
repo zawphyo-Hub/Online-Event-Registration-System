@@ -56,13 +56,15 @@ function PublicEventLink() {
       }}
     >
 
-      {template.template_img_url && (
+      {/* --- Show custom image or template default image ---*/}
+      {(event.event_image_url || template.template_img_url) && (
         <Box
           component="img"
-          src={template.template_img_url}
+          src={event.event_image_url || template.template_img_url}
           sx={{ width: "100%", height: 360, objectFit: "cover" }}
         />
       )}
+
 
       <Box sx={{ p: 4 }}>
 

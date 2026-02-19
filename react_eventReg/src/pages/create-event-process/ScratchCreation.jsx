@@ -265,7 +265,7 @@ function ScratchCreation() {
                   }}
                   sx={{mt: "20px"}}
                   error={!!errors.event_title}
-                  helperText={errors.event_title}
+                  helperText={errors.event_title  }
               />
               <Typography
                sx={{ 

@@ -23,6 +23,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/event-registration/events/**").permitAll()
                         .requestMatchers("/templates/**").permitAll()
                         .requestMatchers("/attendees/**").permitAll()
+                        .requestMatchers("/test-email/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

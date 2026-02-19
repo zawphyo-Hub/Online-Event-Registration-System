@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { useEffect } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 
-function GoogleMapLocation({ inputRef, setEventInfo, setDefaultLocationMarker, mapRef }) {
+function GoogleMapLocation({ inputRef, setEventInfo, setDefaultLocationMarker}) {
   const places = useMapsLibrary("places");
 
   useEffect(() => {

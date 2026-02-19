@@ -19,6 +19,13 @@ public class AttendeeServiceImpl implements AttendeeService{
 
     @Override
     public Attendee createAttendee(Attendee attendee) {
+
+        // Generate a secret key
+        attendee.setSecretKey(java.util.UUID.randomUUID().toString());
+
+        // yet, verification is false.
+        attendee.setIsVerified(false);
+
         return attendeeRepository.save(attendee);
     }
 
@@ -42,6 +49,12 @@ public class AttendeeServiceImpl implements AttendeeService{
     @Override
     public List<Attendee> getAttendeesByEvent(Long Id) {
         return attendeeRepository.findByEvent_EventId(Id);
+    }
+
+
+    @Override
+    public Attendee getAttendeeBySecretKey(String secretKey) {
+        return attendeeRepository.findBySecretKey(secretKey).orElse(null);
     }
 
 

@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface AttendeeRepository extends JpaRepository<Attendee, Long> {
 
     List<Attendee> findByEvent_EventId(Long Id);
+    Optional<Attendee> findBySecretKey(String secretKey);
+
 }

@@ -25,6 +25,9 @@ public class Attendee {
     private String lastName;
     private String email;
 
+    private String secretKey;
+
+    private Boolean isVerified;
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;

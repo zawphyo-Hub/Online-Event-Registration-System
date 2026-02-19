@@ -1,11 +1,13 @@
 package EventReg_SpringBoot.backend_eventRegistration.attendee;
 
+import EventReg_SpringBoot.backend_eventRegistration.emailService.EmailService;
 import EventReg_SpringBoot.backend_eventRegistration.event.Event;
 import EventReg_SpringBoot.backend_eventRegistration.event.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -15,6 +17,7 @@ public class AttendeeController {
 
     private final AttendeeService attendeeService;
     private final EventService eventService;
+    private final EmailService emailService;
 
 
     // store attendee info using event_slug rather than event_id
@@ -22,11 +25,28 @@ public class AttendeeController {
     public ResponseEntity<Attendee> registerAttendee(
             @PathVariable String slug,
             @RequestBody Attendee attendee
-    ) {
+    ) throws Exception{
         Event event = eventService.getEventBySlug(slug);
 
         attendee.setEvent(event);
         Attendee saved = attendeeService.createAttendee(attendee);
+
+        // for sending email confirmation
+        String eventDate = event.getStart_date().format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
+        String eventStartTime = event.getStart_time().format(DateTimeFormatter.ofPattern("hh:mm a"));
+        String eventEndTime = event.getEnd_time().format(DateTimeFormatter.ofPattern("hh:mm a"));
+        emailService.sendAttendeeEmail(
+                saved.getEmail(),
+                saved.getFirstName(),
+                saved.getLastName(),
+                event.getEvent_title(),
+
+                eventDate,
+                eventStartTime,
+                eventEndTime,
+                event.getLocation(),
+                saved.getSecretKey()
+        );
         return ResponseEntity.ok(saved);
     }
 
@@ -51,6 +71,25 @@ public class AttendeeController {
     public ResponseEntity<List<Attendee>> getAttendeesForEvent(@PathVariable Long eventId) {
         List<Attendee> attendees = attendeeService.getAttendeesByEvent(eventId);
         return ResponseEntity.ok(attendees);
+    }
+
+
+    @GetMapping("/verify/{secretKey}")
+    public ResponseEntity<String> verifyAttendee(@PathVariable String secretKey) {
+        Attendee attendee = attendeeService.getAttendeeBySecretKey(secretKey);
+
+        if (attendee == null) {
+            return ResponseEntity.badRequest().body("Invalid QR code");
+        }
+
+        if (Boolean.TRUE.equals(attendee.getIsVerified())) {
+            return ResponseEntity.badRequest().body("QR code already used");
+        }
+
+        attendee.setIsVerified(true);
+        attendeeService.updateAttendee(attendee.getAttendee_id(), attendee);
+
+        return ResponseEntity.ok("Verification successful");
     }
 
 }

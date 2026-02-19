@@ -33,6 +33,15 @@ public class EventController {
         return ResponseEntity.ok(savedEvent);
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Event> updateEvent(
+            @PathVariable Long id,
+            @RequestBody Event event
+    ) {
+        Event updatedEvent = eventService.updateEvent(id, event);
+        return ResponseEntity.ok(updatedEvent);
+    }
+
     @GetMapping("/getUsersEvent/{userId}")
     public ResponseEntity<List<Event>> getEventsByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(eventService.getEventsByUserId(userId));

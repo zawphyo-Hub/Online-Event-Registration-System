@@ -1,12 +1,12 @@
-import { Box, Typography, Divider, Button, Link } from "@mui/material";
+import { Box, Typography, Divider, Button, Link, TextField } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import dateIcon from "../../assets/date.png";
 import timeIcon from "../../assets/time.png";
 import locationIcon from "../../assets/address.png";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
-
+import GoogleMapLocation from "../create-event-process/GoogleMapLocation";
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 
@@ -14,8 +14,20 @@ import { useNavigate } from 'react-router-dom';
 function EventPreview(){
   const { slug } = useParams();
   const [event, setEvent] = useState(null);
+  const [customizeAction, setCustomizeAction] = useState(false);
+
+  // For Google Map auto complete
+  const inputRef = useRef(null);
+  const mapRef = useRef(null);
+  const [defaultLocationMarker, setDefaultLocationMarker] = useState({
+      lat: 51.752,
+      lng: -1.2577,
+    });
+
   const navigate = useNavigate();
 
+ 
+  // Fetch the event data
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -32,6 +44,7 @@ function EventPreview(){
     fetchEvent();
   }, [slug]);
 
+  // publish button
   const handlePublishButton = async () => {
     try {
       const res = await axios.post(
@@ -55,15 +68,60 @@ function EventPreview(){
     }
   };
 
+  // update button
+  const handleUpdateButton = async () => {
+    try {
+      await axios.put(
+        `http://localhost:8080/event-registration/events/update/${event.eventId}`,
+        event
+      );
+      toast.success("Event updated.");
+      setCustomizeAction(false);
+    } catch (err) {
+      toast.error("Update failed. Error!");
+    }
+  };
+
+  // ---- Image Upload to cloudinary ----
+  const handleUploadImage = async (e) => {
+    const fileImage = e.target.files[0];
+    if (!fileImage) return;
+
+    const formData = new FormData();
+    formData.append("file", fileImage);
+    formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        formData
+      );
+
+      const imageUrl = res.data.secure_url;
+
+      setEvent((prev) => ({
+        ...prev,
+        event_image_url: imageUrl,
+      }));
+  
+      console.log("Imaged uploaded to cloudinary.");
+    } catch (err) {
+      toast.error("Image upload failed.");
+    }
+  };
+  
+
   if (!event) 
   return (
       <Box 
       sx={{fontSize: "17px", display: "flex",
         justifyContent: "center", mt: "30px", color: "red"
       }}
-      >Loading....
+      >No event to show.
       </Box>
     )
+
+  
 
   const template = event.template || {};
 
@@ -80,44 +138,161 @@ function EventPreview(){
       }}
     >
 
-      {template.template_img_url && (
+      {/* --- Show custom image or template default image ---*/}
+      {(event.event_image_url || template.template_img_url) && (
         <Box
           component="img"
-          src={template.template_img_url}
+          src={event.event_image_url || template.template_img_url}
           sx={{ width: "100%", height: 360, objectFit: "cover" }}
         />
       )}
 
       <Box sx={{ p: 4 }}>
 
-        <Typography variant="h5" fontWeight="bold" sx={{ color: template.primary_color }}>
-          {event.event_title}
-        </Typography>
+        {/* --- Event Image upload --- */}
+        {customizeAction && (
+          <Box sx={{  mb: 4 }}>
+            <Typography variant="h5" sx={{mb: "20px", fontWeight: "bold"}}>Event Information</Typography>
+            <Typography  sx={{ mb: 1,  fontSize: "13px", color: "gray" }}>
+              Event Image (Optional)
+            </Typography>
 
-        <Typography sx={{ mt: 1, color: template.secondary_color }}>
-          {event.description}
-        </Typography>
+            <input
+              type="file"
+              accept="image/*"
+              
+              onChange={handleUploadImage}
+            />
 
-        <Divider sx={{ my: 3 }} />
+            {event.event_image_url && (
+              <Typography variant="body2" sx={{ mt: 1, color: "green" }}>
+                Event image uploaded
+              </Typography>
+            )}
+          </Box>
+        )}
+        
+
+        {/* --- event title --- */}
+        {customizeAction ? (
+          <TextField
+            fullWidth
+            
+            label="Event Title"
+            value={event.event_title}
+            onChange={(e) =>
+              setEvent({ ...event, event_title: e.target.value })
+            }
+          />
+        ) : (
+          <Typography variant="h5" fontWeight="bold" sx={{ color: template.primary_color }}>
+            {event.event_title}
+          </Typography>
+        )}
+
+        {/* --- event description --- */}
+        {customizeAction ? (
+          <TextField
+            fullWidth
+            multiline
+            rows={3}
+            sx={{ mt: 2 }}
+            label="Description"
+            value={event.description}
+            onChange={(e) =>
+              setEvent({ ...event, description: e.target.value })
+            }
+          />
+        ) : (
+          <Typography sx={{ mt: 1, color: template.secondary_color }}>
+            {event.description}
+          </Typography>
+        )}
+
+        <Divider sx={{ my: 3}} />
+
+        {customizeAction && (
+          <Typography variant="h5" sx={{mb: "20px", fontWeight: "bold"}}>Date - Time</Typography>
+          
+        )}
 
         <Box sx={{ display: "grid", rowGap: 1.5 }}>
 
-          
+          {/* --- date --- */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box component="img" src={dateIcon} sx={{ width: 20, mr: 1 }} />
-            <Typography>
-              <strong>Date:</strong> {event.start_date}
-            </Typography>
+
+            {customizeAction ? (
+              <Box>
+                                           
+              <TextField
+                type="date"
+                size="small"
+                value={event.start_date || ""}
+                onChange={(e) =>
+                  setEvent({ ...event, start_date: e.target.value })
+                }
+              />
+              </Box>
+            ) : (
+              <Typography>
+                <strong>Date:</strong> {event.start_date}
+              </Typography>
+            )}
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box component="img" src={timeIcon} sx={{ width: 20, mr: 1 }} />
-            <Typography>
-              <strong>Time:</strong> {event.start_time} - {event.end_time}
-            </Typography>
+          {/* --- Start Time and end time --- */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box component="img" src={timeIcon} sx={{ width: 20}} />
+
+            {customizeAction ? (
+              <Box sx={{ display: "flex", gap: 1, width: "100%" }}>
+                
+                <TextField
+                  type="time"
+                  size="small"
+                  label="Start"
+                  value={event.start_time || ""}
+                  onChange={(e) =>
+                    setEvent({ ...event, start_time: e.target.value })
+                  }
+                />
+
+                <TextField
+                  type="time"
+                  size="small"
+                  label="End"
+                  value={event.end_time || ""}
+                  onChange={(e) =>
+                    setEvent({ ...event, end_time: e.target.value })
+                  }
+                />
+
+              
+                
+              </Box>
+              
+
+            ) : (
+              <Typography>
+                <strong>Time:</strong> {event.start_time} - {event.end_time}
+              </Typography>
+            )}
           </Box>
 
-          {/* --- Google Map --- */}
+          
+          {customizeAction && (
+          <Divider sx={{ my: 3}} />
+          
+        )}
+
+        {customizeAction && (
+          <Typography variant="h5" sx={{mb: "20px", fontWeight: "bold"}}>Location</Typography>
+          
+        )}
+
+         
+         {/* --- Google Map --- */}
          {event.location_lat && event.location_lng && (
             <Box>
 
@@ -158,13 +333,47 @@ function EventPreview(){
 
         <Divider sx={{ mt: 3}} />
         
-        <Button
-          variant="contained"
-          sx={{ mt: 3, bgcolor: "#3a9ad6"}}
-          onClick={handlePublishButton}
-        >
-          Publish Event
-        </Button>
+        <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
+          {!customizeAction && (
+            <>
+              <Button
+                variant="contained"
+                sx={{ bgcolor: "#3a9ad6"}}
+                onClick={handlePublishButton}
+              >
+                Publish Event
+              </Button>
+
+              <Button
+                variant="contained"
+                sx={{ bgcolor: "#6c63ff"}}
+                onClick={() => setCustomizeAction(true)}
+              >
+                Customize
+              </Button>
+            </>
+          )}
+
+          {customizeAction && (
+            <>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleUpdateButton}
+              >
+                Save Changes
+              </Button>
+
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => setCustomizeAction(false)}
+              >
+                Cancel
+              </Button>
+            </>
+          )}
+        </Box>
       
 
 
@@ -173,3 +382,4 @@ function EventPreview(){
   );
 }
 export default EventPreview;
+

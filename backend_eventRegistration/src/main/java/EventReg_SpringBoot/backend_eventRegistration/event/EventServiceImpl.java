@@ -66,6 +66,7 @@ public class EventServiceImpl implements EventService{
         event1.setLocation(event.getLocation());
         event1.setStart_date(event.getStart_date());
         event1.setStart_time(event.getStart_time());
+        event1.setEnd_time(event.getEnd_time());
         event1.setEvent_image_url(event.getEvent_image_url());
 
         return eventRepository.save(event1);
