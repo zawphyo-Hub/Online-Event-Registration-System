@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { useEffect } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 
-function GoogleMapLocation({ inputRef, setEventInfo, setDefaultLocationMarker}) {
+function GoogleMapLocation({ inputRef, setEvent, setDefaultLocationMarker}) {
   const places = useMapsLibrary("places");
 
   useEffect(() => {
@@ -30,19 +30,26 @@ function GoogleMapLocation({ inputRef, setEventInfo, setDefaultLocationMarker}) 
 
         setDefaultLocationMarker({ lat, lng });
 
-        setEventInfo(prev => ({
-            ...prev,
-            location: {
-            address: fullAddress,
-            latitude: lat,
-            longitude: lng,
-            },
-        }));
+        // setEventInfo(prev => ({
+        //     ...prev,
+        //     location: {
+        //     address: fullAddress,
+        //     latitude: lat,
+        //     longitude: lng,
+        //     },
+        // }));
 
-       setDefaultLocationMarker({ lat, lng });
+          setEvent((prev) => ({
+            ...prev,
+            location: fullAddress,      
+            location_lat: lat,           
+            location_lng: lng, 
+          }));
+    
+        
         });
 
-    }, [places]);
+    }, [places, inputRef, setEvent, setDefaultLocationMarker]);
 
   return (
     <TextField

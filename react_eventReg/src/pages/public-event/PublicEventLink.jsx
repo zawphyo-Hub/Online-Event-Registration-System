@@ -32,7 +32,7 @@ function PublicEventLink() {
   return (
       <Box 
       sx={{fontFamily: "sans-serif", fontSize: "17px", display: "flex",
-        justifyContent: "center", mt: "30px", color: "red"
+        justifyContent: "center", mt: "30px", 
         
       }}
       >Loading...
@@ -130,6 +130,17 @@ function PublicEventLink() {
                 </APIProvider>
 
             </Box>
+            )}
+
+            {event.additionalNote && event.additionalNote.trim() !== "" && (
+              <Box sx={{ mt: 2 }}>
+                <Typography sx={{ fontWeight: "bold" }}>
+                  Additional Note:
+                </Typography>
+                <Typography>
+                  {event.additionalNote}
+                </Typography>
+              </Box>
             )}
 
             <Button  component={Link} to={`/attendee-reg/${slug}`}

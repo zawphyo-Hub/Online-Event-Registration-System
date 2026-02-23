@@ -76,7 +76,7 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
-<!--		// to generate QR for attendee-->
+        <!--		// to generate QR for attendee-->
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
@@ -102,6 +102,12 @@
 			<groupId>dev.samstevens.totp</groupId>
 			<artifactId>totp</artifactId>
 			<version>1.7.1</version>
+		</dependency>
+
+        <!--		OAuth2 Google Login-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
 	</dependencies>
 

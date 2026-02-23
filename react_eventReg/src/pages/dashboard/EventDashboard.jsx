@@ -103,17 +103,19 @@ function EventDashboard() {
 
                 <CardActions>
                   <Button
-                    size="small"
+                    variant="contained"
+                      size="medium"
                     component={Link}
-                    sx={{bgcolor: "#3a9ad6", color: "white", pl: "10px", pr: "10px", fontSize: "12px"}}
+                    sx={{color: "white", pl: "10px", pr: "10px", fontSize: "12px"}}
                     to={`/attendee-management/${event.eventId}`}
                   >
                     Manage Attendees
                   </Button>
                   <Button
-                    size="small"
+                    variant="contained"
+                    size="medium"
                     component={Link}
-                    sx={{bgcolor: "#3a9ad6", color: "white", pl: "10px", pr: "10px", fontSize: "12px"}}
+                    sx={{ color: "white", pl: "10px", pr: "10px", fontSize: "12px"}}
                     to={`/event-preview/${event.slug}`}
                     
                   >
@@ -123,8 +125,9 @@ function EventDashboard() {
                    
                   {event.status === "PUBLISHED" && (
                     <Button
-                      size="small"
-                      sx={{bgcolor: "#3a9ad6", color: "white", pl: "10px", pr: "10px", fontSize: "12px"}}
+                      variant="contained"
+                      size="medium"
+                      sx={{ color: "white", pl: "10px", pr: "10px", fontSize: "12px"}}
                       onClick={() => copyLink(event.slug)}
                     >
                       Copy Link

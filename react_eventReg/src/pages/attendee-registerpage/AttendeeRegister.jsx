@@ -120,7 +120,7 @@ function AttendeeRegister() {
             </Typography>
 
             <Typography variant="body1" color="text.secondary">
-              Your registration has been successfully received.
+              Please find the event information in the email.
               
               
             </Typography>

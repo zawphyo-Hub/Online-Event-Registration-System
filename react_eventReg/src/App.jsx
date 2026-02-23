@@ -19,6 +19,8 @@ import PublicEventLink from "./pages/public-event/PublicEventLink";
 import SuccessPublicPage from "./pages/public-event/SuccessPublicPage";
 import AttendeeRegister from "./pages/attendee-registerpage/AttendeeRegister";
 import AttendeeManagement from "./pages/dashboard/AttendeeManagement";
+import VerifyAttendee from "./pages/verification/VerifyAttendee";
+import GoogleLoginHandler from "./pages/oauthHandler/GoogleLoginHandler";
 
 function App() {
 
@@ -48,6 +50,8 @@ function App() {
 
                 <Route path="/attendee-reg/:slug" element={<AttendeeRegister/>} />
                 <Route path="/attendee-management/:eventId" element={<AttendeeManagement/>} />
+                <Route path="/verify-attendee/:secretKey" element={<VerifyAttendee/>} />
+                <Route path="/google-handler" element={<GoogleLoginHandler/>} />
                 
                 
                 

@@ -42,6 +42,8 @@ public class Event {
     private Double location_lat;
     private Double location_lng;
 
+    private String additionalNote;
+
     private LocalDate start_date;
 
 

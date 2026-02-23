@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {Box, Typography, Card, Table, TableHead, TableRow, TableCell, TableBody, Button, TextField,} from "@mui/material";
+import {Box, Typography, Card, Table, TableHead, TableRow, TableCell, TableBody, Button, TextField, Select, MenuItem} from "@mui/material";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -13,6 +13,8 @@ function AttendeeManagement() {
     firstName: "",
     lastName: "",
     email: "",
+    isVerified: false
+    
   });
 
   const fetchAttendees = async () => {
@@ -36,6 +38,7 @@ function AttendeeManagement() {
       firstName: attendee.firstName,
       lastName: attendee.lastName,
       email: attendee.email,
+      isVerified: attendee.isVerified,
     });
   };
 
@@ -79,6 +82,7 @@ function AttendeeManagement() {
               <TableCell><strong>First Name</strong></TableCell>
               <TableCell><strong>Last Name</strong></TableCell>
               <TableCell><strong>Email</strong></TableCell>
+              <TableCell><strong>Check-In</strong></TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -136,6 +140,24 @@ function AttendeeManagement() {
                     attendee.email
                   )}
                 </TableCell>
+
+
+                <TableCell>
+                    {editAttendeeId === attendee.attendee_id ? (
+                      <Select
+                        value={editedAttendee.isVerified}
+                        onChange={(e) =>
+                          setEditedAttendee({ ...editedAttendee, isVerified: e.target.value === true })
+                        }
+                        size="small"
+                      >
+                        <MenuItem value={true}>True</MenuItem>
+                        <MenuItem value={false}>False</MenuItem>
+                      </Select>
+                    ) : (
+                      attendee.isVerified ? "True" : "False"
+                    )}
+                  </TableCell>
 
                 <TableCell align="center">
                   {editAttendeeId === attendee.attendee_id ? (

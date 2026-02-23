@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Box, Typography, Button, TextField } from "@mui/material";
 import { toast } from "react-toastify";
+import Congrat from "../../assets/Congrat.png";
 
 
 function SuccessPublicPage() {
@@ -27,7 +28,7 @@ function SuccessPublicPage() {
         
       }}
     >
-    <Box sx={{maxWidth: 550,
+      <Box sx={{maxWidth: 550,
           width: "100%",
           borderRadius: 4,
           display: "flex",
@@ -37,10 +38,28 @@ function SuccessPublicPage() {
         alignItems: "center",
         p: "30px",
           boxShadow: 3,
-        gap: 2, }}>
+        gap: 2, }}
+      >
+        <Box sx={{display: "flex"}}>
+      <Box 
+        component="img"
+        src={Congrat}
+        sx={{
+          width: "25px", height: "25px", pr: "7px"
+        }}
+      />
       <Typography variant="h5" sx={{ color: "green" }}>
-        🎉 Your event has been published. 🎉
+        
+        Your event has been published
       </Typography>
+      <Box 
+        component="img"
+        src={Congrat}
+        sx={{
+          width: "25px", height: "25px", pl: "7px"
+        }}
+      />
+      </Box>
 
       <Typography>
         Share this link with your attendees:

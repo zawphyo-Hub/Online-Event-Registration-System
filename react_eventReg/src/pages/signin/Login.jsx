@@ -42,6 +42,13 @@ function Login() {
 
   }
 
+
+  // Google login handle
+  const handleGoogleLogin = () => {
+      window.location.href = "http://localhost:8080/oauth2/authorization/google"
+
+  }
+
   const handleLogin = async (event) => {
 
      
@@ -198,6 +205,7 @@ function Login() {
           variant="outlined"
           fullWidth
           sx={{color: "black", fontSize: "14px", borderColor: "#572c67"}}
+          onClick={handleGoogleLogin}
           startIcon={
             <Box
               component="img"

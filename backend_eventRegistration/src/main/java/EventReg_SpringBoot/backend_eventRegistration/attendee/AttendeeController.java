@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -75,21 +76,31 @@ public class AttendeeController {
 
 
     @GetMapping("/verify/{secretKey}")
-    public ResponseEntity<String> verifyAttendee(@PathVariable String secretKey) {
+    public ResponseEntity<?> verifyAttendee(@PathVariable String secretKey) {
         Attendee attendee = attendeeService.getAttendeeBySecretKey(secretKey);
 
         if (attendee == null) {
-            return ResponseEntity.badRequest().body("Invalid QR code");
+            return ResponseEntity.badRequest().body(
+                    Map.of("status", "ERROR", "message", "Invalid QR Code."));
         }
 
         if (Boolean.TRUE.equals(attendee.getIsVerified())) {
-            return ResponseEntity.badRequest().body("QR code already used");
+            return ResponseEntity.badRequest().body(
+                    Map.of("status", "ERROR", "message", "QR Code Already Used."));
         }
 
+        // First scan, set to true
         attendee.setIsVerified(true);
         attendeeService.updateAttendee(attendee.getAttendee_id(), attendee);
 
-        return ResponseEntity.ok("Verification successful");
+        return ResponseEntity.ok(
+                Map.of(
+                        "status", "SUCCESSFUL",
+                        "firstName", attendee.getFirstName(),
+                        "lastName", attendee.getLastName(),
+                        "email", attendee.getEmail()
+                )
+        );
     }
 
 }

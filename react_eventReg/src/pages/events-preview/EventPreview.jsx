@@ -71,9 +71,15 @@ function EventPreview(){
   // update button
   const handleUpdateButton = async () => {
     try {
+      const payLoad = {
+        ...event,
+        location: event.location,          
+        location_lat: event.location_lat,  
+        location_lng: event.location_lng,  
+      };
       await axios.put(
         `http://localhost:8080/event-registration/events/update/${event.eventId}`,
-        event
+        payLoad
       );
       toast.success("Event updated.");
       setCustomizeAction(false);
@@ -115,9 +121,9 @@ function EventPreview(){
   return (
       <Box 
       sx={{fontSize: "17px", display: "flex",
-        justifyContent: "center", mt: "30px", color: "red"
+        justifyContent: "center", mt: "30px",
       }}
-      >No event to show.
+      >Loading...
       </Box>
     )
 
@@ -287,7 +293,7 @@ function EventPreview(){
         )}
 
         {customizeAction && (
-          <Typography variant="h5" sx={{mb: "20px", fontWeight: "bold"}}>Location</Typography>
+          <Typography variant="h5" sx={{mb: "10px", fontWeight: "bold"}}>Location</Typography>
           
         )}
 
@@ -298,16 +304,30 @@ function EventPreview(){
 
                <Box sx={{ display: "flex", alignItems: "center", mb: "15px" }}>
                     <Box component="img" src={locationIcon} sx={{ width: 20, mr: 1 }} />
-                    <Typography>
-                    <strong>Event Location:</strong> {event.location}
-                    </Typography>
-                </Box>
-          
+                      <Typography>
+                      <strong>Location:</strong> {event.location}
+                      </Typography>
+                  </Box>
 
-                <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+                            
+
+                <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+                libraries={["places"]}
+
+                >
+                   {customizeAction && (
+                      <GoogleMapLocation
+                        inputRef={inputRef}
+                        setEvent={setEvent}
+                        setDefaultLocationMarker={setDefaultLocationMarker}
+                        
+                      />
+                    )}
                 <Box sx={{ height: "300px", width: "100%" }}>
+
+                   
                     <Map
-                    defaultCenter={{
+                    center={{
                         lat: event.location_lat,
                         lng: event.location_lng
                     }}
@@ -331,11 +351,53 @@ function EventPreview(){
             
         </Box>
 
+        {customizeAction ? (
+          <Box sx={{ mt: 2 }}>
+            <Typography
+              sx={{ mb: 1, fontWeight: "bold", fontSize: "16px" }}
+            >
+              Additional Note
+            </Typography>
+
+            <TextField
+              fullWidth
+              multiline
+              rows={2}
+              placeholder="Enter additional information."
+              value={event.additionalNote || ""}
+              onChange={(e) =>
+                setEvent({ ...event, additionalNote: e.target.value })
+              }
+              slotProps={{
+                htmlInput: { maxLength: 100 },
+              }}
+            />
+          </Box>
+        ) : (
+          event.additionalNote?.trim() && (
+            <Box sx={{ mt: 2 }}>
+              <Typography sx={{ fontWeight: "bold" }}>
+                Additional Note:
+              </Typography>
+              <Typography sx={{ color: "gray" }}>
+                {event.additionalNote}
+              </Typography>
+            </Box>
+          )
+        )}
+
         <Divider sx={{ mt: 3}} />
         
-        <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
+        <Box sx={{ display: "flex", mt: 3, justifyContent: "space-between" }}>
           {!customizeAction && (
             <>
+             <Button
+                variant="contained"
+                sx={{ bgcolor: "#037e20"}}
+                onClick={() => setCustomizeAction(true)}
+              >
+                Customize
+              </Button>
               <Button
                 variant="contained"
                 sx={{ bgcolor: "#3a9ad6"}}
@@ -344,13 +406,7 @@ function EventPreview(){
                 Publish Event
               </Button>
 
-              <Button
-                variant="contained"
-                sx={{ bgcolor: "#6c63ff"}}
-                onClick={() => setCustomizeAction(true)}
-              >
-                Customize
-              </Button>
+             
             </>
           )}
 
@@ -366,7 +422,7 @@ function EventPreview(){
 
               <Button
                 variant="outlined"
-                color="error"
+                
                 onClick={() => setCustomizeAction(false)}
               >
                 Cancel

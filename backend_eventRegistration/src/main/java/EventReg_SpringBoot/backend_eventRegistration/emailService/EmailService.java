@@ -54,9 +54,11 @@ public class EmailService {
         helper.setTo(toEmail);
         helper.setSubject("Event Registration Successful");
 
-        byte[] qrCodeBytes = generateQRCode(secretKey, 200, 200);
 
-        // HTML body
+        String verificationUrl = "http://localhost:5173/verify-attendee/" + secretKey;
+        byte[] qrCodeBytes = generateQRCode(verificationUrl, 200, 200);
+
+        // Email body
         String emailMsg = "<p style='color:#000000;'>Hello " + firstName + " " + lastName + ",</p>" +
                 "<p style='color:#000000;'>Thank you for registering for the event.</p>" +
                 "<h3 style='color:#000000;'>Event Details:</h3>" +

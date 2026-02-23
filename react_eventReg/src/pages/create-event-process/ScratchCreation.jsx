@@ -25,11 +25,10 @@ function ScratchCreation() {
       
       event_title: "",
       description: "",
-      location: {
-        address:"",
-        latitude: null,
-        longitude: null
-      },
+      location: "",      
+      location_lat: null,
+      location_lng: null,
+      additionalNote: "",
 
       start_date: "",
       
@@ -114,7 +113,7 @@ function ScratchCreation() {
       isValid = false;
     }
 
-    if (!eventInfo.location.address) {
+    if (!eventInfo.location) {
       newErrors.location = "Location is required.";
       isValid = false;
     }
@@ -164,9 +163,10 @@ function ScratchCreation() {
           user: { userID: userId },
           event_title: eventInfo.event_title,
           description: eventInfo.description,
-          location: eventInfo.location.address,
-          location_lat: eventInfo.location.latitude,
-          location_lng: eventInfo.location.longitude,
+          location: eventInfo.location,
+          location_lat: eventInfo.location_lat,
+          location_lng: eventInfo.location_lng,
+          additionalNote: eventInfo.additionalNote || null,
           start_date: eventInfo.start_date,
           start_time: eventInfo.start_time,
           end_time: eventInfo.end_time,
@@ -337,7 +337,7 @@ function ScratchCreation() {
 
                 <GoogleMapLocation
                   inputRef={inputRef}
-                  setEventInfo={setEventInfo}
+                  setEvent={setEventInfo}
                   setDefaultLocationMarker={setDefaultLocationMarker}
                   mapRef={mapRef}
                   // error={!!errors.location}
@@ -375,9 +375,43 @@ function ScratchCreation() {
 
             {eventInfo.location.address && (
               <Typography sx={{ fontSize: 14, color: "green" }}>
-                Selected Location: {eventInfo.location.address}
+                Selected Location: {eventInfo.location}
               </Typography>
             )}
+
+            <FormControl>
+            <FormLabel sx={{color: "black", fontFamily: "sans-serif", fontWeight: "bold", fontSize: "16px"}}>
+              Addtional Address
+              <Typography component="span" sx={{ color: "gray", pl: "2px" }}>
+                  (Optional)
+              </Typography>
+            </FormLabel>
+            <TextField
+             placeholder="Enter additional information."
+                name="additionalNote"
+                value={eventInfo.additionalNote}
+                onChange={handleOnChange}
+                multiline
+                rows={2}
+                fullWidth
+                sx={{mt: "15px"}}
+                
+                slotProps={{
+                    htmlInput: { maxLength: 100 },
+                }}
+              
+            />
+            <Typography
+               sx={{ 
+                color: "gray", 
+                fontSize: "12px", 
+                textAlign: "right", 
+                mt: "2px", 
+                fontStyle: "italic" 
+              }}
+              >Max Length: 100
+              </Typography>
+            </FormControl>
           
             
 

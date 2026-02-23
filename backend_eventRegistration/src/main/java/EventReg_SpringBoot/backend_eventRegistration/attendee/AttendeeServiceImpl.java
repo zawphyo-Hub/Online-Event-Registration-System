@@ -36,6 +36,7 @@ public class AttendeeServiceImpl implements AttendeeService{
         newAttendee.setFirstName(attendee.getFirstName());
         newAttendee.setLastName(attendee.getLastName());
         newAttendee.setEmail(attendee.getEmail());
+        newAttendee.setIsVerified(attendee.getIsVerified());
 
 
         return attendeeRepository.save(newAttendee);
