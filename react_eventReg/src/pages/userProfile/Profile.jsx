@@ -80,6 +80,17 @@ function Profile() {
         }
       );
 
+        if (res.data.secretKey2FA && userData.mfaEnabled === true) {
+          toast.info("Scan the QR code to enable multi-factor authentication.")
+          navigate("/twofaqr", {
+            state: {
+              twoFaQr: res.data.secretKey2FA,
+              email: res.data.email,
+            },
+          });
+          return;
+        }
+
       // Update new user data in localStorage
       const updatedUser = {
         ...user,

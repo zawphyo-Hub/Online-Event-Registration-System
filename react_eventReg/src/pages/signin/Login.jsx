@@ -65,24 +65,34 @@ function Login() {
         const response =  await axios.post('http://localhost:8080/EventApi/authentication/login', 
           {email, password});
 
+          const data = response.data;
+
+          // if MFA enabled AND QR not verified
+          if (data.mfaEnabled && data.secretQrCode) {
+            navigate("/twofaqr", { 
+              state: { 
+                email: data.email, 
+                twoFaQr: data.secretQrCode 
+              } 
+            });
+          }
+
+          // mfa verified and enabled
+          else if (data.mfaEnabled) {
+            navigate("/totpverify", { state: { email: data.email } });
+          }
          
+          else {
+            
+            // store user info in local storage
+            localStorage.setItem("user", JSON.stringify(response.data));
+            // console.log("Stored user:", JSON.parse(localStorage.getItem("user")));
 
-                
-        if (response.data.mfaEnabled) {
-          
-          navigate("/totpverify", { state: { email } }); // send email
-        } 
-        else {
-          
-          // store user info in local storage
-          localStorage.setItem("user", JSON.stringify(response.data));
-          console.log("Stored user:", JSON.parse(localStorage.getItem("user")));
+            toast.success("Login successful!");
+            navigate("/mainpage");
 
-          toast.success("Login successful!");
-          navigate("/mainpage");
-
-          
-        }
+            
+          }
        
         
     } catch (error) {
@@ -169,7 +179,7 @@ function Login() {
           <Box sx={{ textAlign: "right", mt: 1 }}>
             <Typography
               component={Link}
-              to="/forgot-password"
+              to="/forgot-pw"
               sx={{
                 fontSize: 14,
                 color: "black",

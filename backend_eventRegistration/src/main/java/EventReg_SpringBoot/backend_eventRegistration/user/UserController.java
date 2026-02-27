@@ -14,4 +14,21 @@ public class UserController {
     public User updateUser(@PathVariable Long userID, @RequestBody User updatedUser) {
         return userService.updateUser(userID, updatedUser);
     }
+
+
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestParam String email) throws Exception {
+        userService.sendPasswordResetLink(email);
+        return "Reset link sent to your email.";
+    }
+
+
+    @PostMapping("/reset-password")
+    public String resetPassword(
+            @RequestParam String token,
+            @RequestParam String newPassword) {
+
+        userService.resetPassword(token, newPassword);
+        return "Password reset successful.";
+    }
 }

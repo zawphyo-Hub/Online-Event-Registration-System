@@ -96,7 +96,7 @@ function Signup(){
 
         // Check if two-fa enabled, if true then return QR code
         if (response.data.mfaEnabled && response.data.secretQrCode) {
-          
+          toast.success("Account Created.")
           navigate('/twofaqr', {
             state: {
               email,
@@ -122,6 +122,12 @@ function Signup(){
         }
         
        }
+
+  }
+
+  // Google Sign Up handle
+  const handleGoogleSignup = () => {
+      window.location.href = "http://localhost:8080/oauth2/authorization/google"
 
   }
   
@@ -302,6 +308,7 @@ function Signup(){
           variant="outlined"
           fullWidth
           sx={{color: "black", fontSize: "14px", borderColor: "#572c67"}}
+          onClick={handleGoogleSignup}
           startIcon={
             <Box
               component="img"

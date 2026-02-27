@@ -8,6 +8,8 @@ function GoogleLoginHandler() {
   const navigate = useNavigate();
   const hasRun = useRef(false);
 
+  
+
   useEffect(() => {
     if (hasRun.current) return; 
     hasRun.current = true;
@@ -17,13 +19,37 @@ function GoogleLoginHandler() {
     const email = params.get("email");
     const username = params.get("username");
     const id = params.get("id");
+    const mfaEnabled = params.get("mfaEnabled") === "true";
+    const mfaVerified = params.get("mfaVerified") === "true";
+    const secretQrCode = params.get("secretQrCode");
 
-    if (email) {
+
+        
+     if (!email) {
+      toast.error("Login Error.");
+      navigate("/login", { state: { loginError: true } });
+      return;
+    }
+      
+    if (mfaEnabled && mfaVerified) {
+      navigate("/totpverify", {
+        state: { email, userId: id  }
+      });
+      return;
+    }
+    if(mfaEnabled && !mfaVerified){
+      navigate("/twofaqr", { state: { email: email, twoFaQr: secretQrCode } });
+      return;
+    }
+    
+
+    
       const userData = {
         userId: id,
         username: username,
         email: email,
-        mfaEnabled: false
+        mfaEnabled: mfaEnabled,
+        mfaVerified: mfaVerified,
       };
 
 
@@ -36,12 +62,11 @@ function GoogleLoginHandler() {
       
             
 
-    } else {
-     
-      toast.error("Login Error.");
-      navigate("/login", { state: { loginError: true } });
-    }
+
+    
+  
   }, [navigate]);
+
 
   return <Box 
       sx={{fontSize: "17px", display: "flex",

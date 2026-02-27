@@ -1,5 +1,6 @@
 package EventReg_SpringBoot.backend_eventRegistration.oauth2;
 
+import EventReg_SpringBoot.backend_eventRegistration.twofa.TwoFAService;
 import EventReg_SpringBoot.backend_eventRegistration.user.User;
 import EventReg_SpringBoot.backend_eventRegistration.user.UserRepository;
 import jakarta.servlet.ServletException;
@@ -20,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 public class GoogleLoginHandler implements AuthenticationSuccessHandler {
 
     private final UserRepository userRepository;
+    private final TwoFAService twoFAService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -51,12 +53,30 @@ public class GoogleLoginHandler implements AuthenticationSuccessHandler {
         });
 
 
-        // Step 3: After successful, Redirect to frontend
-        response.sendRedirect("http://localhost:5173/google-handler"
+        // After successful, Redirect to frontend
+        boolean mfaEnabled = Boolean.TRUE.equals(user.getMfaEnabled());
+        boolean mfaVerified = Boolean.TRUE.equals(user.getIsMfaVerified());
+
+        if (Boolean.TRUE.equals(user.getMfaEnabled()) && user.getSecretKey2FA() == null) {
+            user.setSecretKey2FA(twoFAService.generateSecretKey());
+            userRepository.save(user);
+        }
+
+        String qrCode = "";
+        if (Boolean.TRUE.equals(user.getMfaEnabled()) && !Boolean.TRUE.equals(user.getIsMfaVerified())) {
+            qrCode = twoFAService.generateQrCode(user.getSecretKey2FA());
+        }
+
+
+        String redirectUrl = "http://localhost:5173/google-handler"
                 + "?email=" + URLEncoder.encode(user.getEmail(), StandardCharsets.UTF_8)
                 + "&username=" + URLEncoder.encode(user.getUsername(), StandardCharsets.UTF_8)
                 + "&id=" + user.getUserID()
-        );
+                + "&mfaEnabled=" + mfaEnabled
+                + "&mfaVerified=" + mfaVerified
+                + "&secretQrCode=" + URLEncoder.encode(qrCode, StandardCharsets.UTF_8);
+
+        response.sendRedirect(redirectUrl);
 
     }
 

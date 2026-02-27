@@ -21,6 +21,8 @@ import AttendeeRegister from "./pages/attendee-registerpage/AttendeeRegister";
 import AttendeeManagement from "./pages/dashboard/AttendeeManagement";
 import VerifyAttendee from "./pages/verification/VerifyAttendee";
 import GoogleLoginHandler from "./pages/oauthHandler/GoogleLoginHandler";
+import ForgotPw from "./pages/forgot_password/ForgotPw";
+import ResetLinkPage from "./pages/forgot_password/ResetLinkPage";
 
 function App() {
 
@@ -52,6 +54,8 @@ function App() {
                 <Route path="/attendee-management/:eventId" element={<AttendeeManagement/>} />
                 <Route path="/verify-attendee/:secretKey" element={<VerifyAttendee/>} />
                 <Route path="/google-handler" element={<GoogleLoginHandler/>} />
+                <Route path="/forgot-pw" element={<ForgotPw/>} />
+                <Route path="/reset-password" element={<ResetLinkPage/>} />
                 
                 
                 

@@ -85,4 +85,31 @@ public class EmailService {
 
 
     }
+
+    public void sendPasswordResetEmail(
+            String toEmail,
+            String username,
+            String resetLink
+    ) throws Exception {
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+        helper.setTo(toEmail);
+        helper.setSubject("Password Reset Request");
+
+        String emailMsg =
+                "<p>Hi " + username + ",</p>" +
+
+                        "<p>Click the link below to reset your password:</p>" +
+                        "<p><a href='" + resetLink + "'>Reset Password</a></p>" +
+                        "<p>This link will be expired in 10 minutes.</p>" +
+                        "<p>If you did not request this, please ignore this email.</p>" +
+                        "<br/><p>Best regards,<br/>Agenda.</p>";
+
+        helper.setText(emailMsg, true);
+
+        mailSender.send(mimeMessage);
+        System.out.println("Password reset email sent.");
+    }
 }

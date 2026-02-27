@@ -35,10 +35,17 @@ public class User implements UserDetails {
     private String email;
 
     private String password;
-    private Boolean mfaEnabled;
+
+    @Column(nullable = false)
+    private Boolean mfaEnabled = false;
+
     private String secretKey2FA;
 
-    private Boolean isMfaVerified;
+    @Column(nullable = false)
+    private Boolean isMfaVerified = false;
+
+    private String resetPwToken;
+    private Long resetTokenExpiry;
 
 
     @Override
