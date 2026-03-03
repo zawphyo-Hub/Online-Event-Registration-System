@@ -23,6 +23,7 @@ import VerifyAttendee from "./pages/verification/VerifyAttendee";
 import GoogleLoginHandler from "./pages/oauthHandler/GoogleLoginHandler";
 import ForgotPw from "./pages/forgot_password/ForgotPw";
 import ResetLinkPage from "./pages/forgot_password/ResetLinkPage";
+import Footer from "./pages/footer/Footer";
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
                 <Route path="/google-handler" element={<GoogleLoginHandler/>} />
                 <Route path="/forgot-pw" element={<ForgotPw/>} />
                 <Route path="/reset-password" element={<ResetLinkPage/>} />
+                <Route path="/footer" element={<Footer/>} />
                 
                 
                 

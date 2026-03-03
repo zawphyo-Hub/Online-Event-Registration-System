@@ -1,9 +1,11 @@
 package EventReg_SpringBoot.backend_eventRegistration.event;
 
+import EventReg_SpringBoot.backend_eventRegistration.attendee.AttendeeRepository;
 import EventReg_SpringBoot.backend_eventRegistration.template.Template;
 import EventReg_SpringBoot.backend_eventRegistration.template.TemplateRepository;
 import EventReg_SpringBoot.backend_eventRegistration.user.User;
 import EventReg_SpringBoot.backend_eventRegistration.user.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ public class EventServiceImpl implements EventService{
     private final EventRepository eventRepository;
     private final TemplateRepository templateRepository;
     private final UserRepository userRepository;
+    private final AttendeeRepository attendeeRepository;
 
     @Override
     public Event getEventById(Long id) {
@@ -73,8 +76,16 @@ public class EventServiceImpl implements EventService{
         return eventRepository.save(event1);
     }
 
+
+    @Transactional
     @Override
     public void deleteEvent(Long id) {
+        if (!eventRepository.existsById(id)) {
+            throw new RuntimeException("Event not found: " + id);
+        }
+
+        attendeeRepository.deleteByEvent_EventId(id);
+        attendeeRepository.flush();
         eventRepository.deleteById(id);
     }
 

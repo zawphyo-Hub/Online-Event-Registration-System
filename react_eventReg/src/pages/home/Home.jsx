@@ -30,10 +30,11 @@ function Home() {
         }}
       >
         
+        
         <Box
           sx={{
             flex: 1,
-            bgcolor: "#3fa2e0",
+            bgcolor: "#209ae6",
             color: "white",
             p: { xs: 3, md: 7 },
             display: "flex",
@@ -46,12 +47,29 @@ function Home() {
         >
           
 
-          <Typography  fontWeight="bold" gutterBottom sx={{ lineHeight: 1.2, fontSize: "30px" }}>
-            Online Invitation and Event Registration Platform
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 700,
+              lineHeight: 1.15,
+              fontSize: { xs: "1.8rem", md: "2.2rem" },
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Online Invitation & Event Registration Platform
           </Typography>
 
-          <Typography variant="body1" sx={{ mt: 2, opacity: 0.9, maxWidth: 400 }}>
-            Launch your events in minutes, invite friends and family online, and keep everything organized for your events.
+          <Typography
+            sx={{
+              mt: 2.2,
+              opacity: 0.95,
+              maxWidth: 420,
+              fontSize: { xs: "0.98rem", md: "1.05rem" },
+              lineHeight: 1.7,
+            }}
+          >
+            Create beautiful digital invitations, share your event link instantly,
+            and manage attendees with ease using Agenda.
           </Typography>
         </Box>
 

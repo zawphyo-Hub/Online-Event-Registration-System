@@ -37,7 +37,8 @@ function TemplateSelection() {
   
   return (
     <Box sx={{ p: 4,  }}>
-      <Typography variant="h4" mb={3} textAlign="center">
+      <Typography variant="h6" mb={3} textAlign="center"
+      sx={{fontWeight: 600}}>
         Choose a Template
       </Typography>
 
@@ -67,13 +68,29 @@ function TemplateSelection() {
               }}
             >
               
-              {template.template_img_url && (
+              {template.template_img_url ? (
                 <CardMedia
                   component="img"
                   height="220"
                   image={template.template_img_url}
                   alt={template.template_name}
                 />
+              ) : (
+                <Box
+                  sx={{
+                    height: 220,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background:
+                      "linear-gradient(135deg, rgba(63,162,224,0.15), rgba(70,174,247,0.08))",
+                    fontWeight: 700,
+                    fontSize: "0.95rem",
+                    color: "text.secondary",
+                  }}
+                >
+                  Basic Template
+                </Box>
               )}
 
               <CardContent sx={{ flexGrow: 1 }}>

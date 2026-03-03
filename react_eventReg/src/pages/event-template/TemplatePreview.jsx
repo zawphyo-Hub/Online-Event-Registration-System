@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Divider } from "@mui/material";
+import { Box, Typography, Button, Divider, Chip } from "@mui/material";
 import dateIcon from "../../assets/date.png";
 import timeIcon from "../../assets/time.png";
 import locationIcon from "../../assets/address.png";
@@ -49,128 +49,174 @@ function TemplatePreview() {
       
   };
 
-  return (
+   return (
     <Box
       sx={{
-        fontFamily: template.font_family,
-        
-        maxWidth: 900,
-        mx: "auto",
-        my: 4,
-        borderRadius: 3,
-        overflow: "hidden",
-        boxShadow: 4,
+        minHeight: "100vh",
+        py: { xs: 3, md: 5 },
+        px: { xs: 2, md: 3 },
+        background: "linear-gradient(135deg, rgba(63,162,224,0.10), rgba(70,174,247,0.06))",
       }}
     >
-      
-      {template.template_img_url && (
-        <Box
-          component="img"
-          src={template.template_img_url}
-          alt="Template preview"
-          sx={{ width: "100%", height: 360, objectFit: "cover" }}
-        />
-      )}
-
-      
-     
-      <Box sx={{ p: 4 }}>
-       
-        <Typography variant="h4" fontWeight="bold" sx={{ color: template.primary_color }}> 
-          Sample Event Title
-        </Typography>
-
+      <Box
+        sx={{
+          maxWidth: 980,
+          mx: "auto",
+          borderRadius: 4,
+          overflow: "hidden",
+          boxShadow: "0 30px 80px rgba(0,0,0,0.12)",
+          border: "1px solid rgba(0,0,0,0.06)",
+          bgcolor: "white",
+        }}
+      >
         
-        <Typography sx={{ mt: 1, color: template.secondary_color, fontStyle: "italic" }}>
-           Event Description: This is a sample description to help you visualise how your event
-            details will appear using this template. 
-        </Typography>
-
-        <Divider sx={{ my: 3 }} />
-
-       
-       
-        <Box sx={{ display: "grid", rowGap: 1.5 }}>
-
-          
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+        
+          {template.template_img_url && (
+            <Box sx={{ position: "relative" }}>
             <Box
               component="img"
-              src={locationIcon}
-              alt="Location"
-              sx={{ width: 20, height: 20, mr: 1 }}
+              src={template.template_img_url}
+              alt="Template preview"
+              sx={{ width: "100%", height: { xs: 240, md: 340 }, objectFit: "cover" }}
             />
-            <Typography>
-              <strong>Location:</strong> Example Hall, Building A, City Centre
-            </Typography>
-          </Box>
+          
 
           
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box
-              component="img"
-              src={dateIcon}
-              alt="Date"
-              sx={{ width: 20, height: 20, mr: 1 }}
-            />
-            <Typography>
-              <strong>Date:</strong> 20 May 20XX
-            </Typography>
-          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.55) 100%)",
+                height: { xs: 240, md: 340 }, 
+            }}
+          />
 
           
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box
-              component="img"
-              src={timeIcon}
-              alt="Time"
-              sx={{ width: 20, height: 20, mr: 1 }}
-            />
-            <Typography>
-              <strong>Time:</strong> 10:00 AM - 3:00 PM
+          <Box
+            sx={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              p: { xs: 2.5, md: 4 },
+              color: "white",
+            }}
+          >
+            <Typography sx={{ fontWeight: 900, fontSize: { xs: "1.6rem", md: "2.2rem" } }}>
+              {template.template_name}
+            </Typography>
+
+            <Typography sx={{ mt: 0.6, opacity: 0.9, maxWidth: 700 }}>
+              Preview how your event page will look using this template.
             </Typography>
           </Box>
-
         </Box>
+        )}
+          
 
-        
-        <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleSelect}
+       
+        <Box sx={{ p: { xs: 2.5, md: 4 } }}>
+          
+          <Typography
             sx={{
-              backgroundColor: template.primary_color,
-              px: 5,
-              py: 1.5,
-              fontWeight: "bold",
-              "&:hover": {
-                backgroundColor: template.primary_color,
-                opacity: 0.9,
-              },
+              fontWeight: 900,
+              fontSize: { xs: "1.6rem", md: "2rem" },
+              color: template.primary_color || "text.primary",
+              lineHeight: 1.15,
             }}
           >
-            Use This Template
-          </Button>
+            Sample Event Title
+          </Typography>
 
-           <Button
-            variant="contained"
-            size="large"
-            to="/template-selection"
-            component={Link}
+          <Typography
             sx={{
-              backgroundColor: template.primary_color,
-              px: 5,
-              py: 1.5,
-              fontWeight: "bold",
-              "&:hover": {
-                backgroundColor: template.primary_color,
-                opacity: 0.9,
-              },
+              mt: 1,
+              color: template.secondary_color || "text.secondary",
+              lineHeight: 1.7,
+              maxWidth: 780,
             }}
           >
-            Go back
-          </Button>
+            This is a sample description to help you visualise how your event details will appear using this template.
+          </Typography>
+
+          <Divider sx={{ my: 3 }} />
+
+          
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" },
+              gap: 1.2,
+            }}
+          >
+            {[
+              { icon: locationIcon, label: "Location", value: "Example Hall, Building A, City Centre." },
+              { icon: dateIcon, label: "Date", value: "Example Date" },
+              { icon: timeIcon, label: "Time", value: "Example Time" },
+            ].map((item) => (
+              <Box
+                key={item.label}
+                sx={{
+                  borderRadius: 3,
+                  border: "1px solid rgba(0, 0, 0, 0.08)",
+                  background: "linear-gradient(135deg, rgba(63,162,224,0.08), rgba(70,174,247,0.03))",
+                  p: 2,
+                  display: "flex",
+                  gap: 1.2,
+                  alignItems: "flex-start",
+                }}
+              >
+                <Box component="img" src={item.icon} alt={item.label} sx={{ width: 20, height: 20, mt: "2px" }} />
+                <Box>
+                  <Typography sx={{ fontWeight: 900, fontSize: "0.95rem" }}>{item.label}</Typography>
+                  <Typography sx={{ color: "text.secondary", mt: 0.3, lineHeight: 1.5 }}>
+                    {item.value}
+                  </Typography>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+
+          
+          <Box
+            sx={{
+              mt: 4,
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              gap: 1.2,
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              variant="outlined"
+              size="large"
+              component={Link}
+              to="/template-selection"
+              sx={{
+                borderRadius: 2.2,
+                fontWeight: 700,
+                px: 3,
+              }}
+            >
+              Back
+            </Button>
+
+            <Button
+              variant="contained"
+              size="large"
+              onClick={handleSelect}
+              sx={{
+                borderRadius: 2.2,
+                fontWeight: 700,
+                px: 3,
+                backgroundColor: template.primary_color || "#3a9ad6",
+                "&:hover": { backgroundColor: template.primary_color || "#3a9ad6", opacity: 0.92 },
+              }}
+            >
+              Use This Template
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>

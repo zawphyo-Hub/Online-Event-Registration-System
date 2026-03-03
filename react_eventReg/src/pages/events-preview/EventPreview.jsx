@@ -133,65 +133,111 @@ function EventPreview(){
 
   return (
     <Box
+    sx={{
+      minHeight: "100vh",
+      py: { xs: 3, md: 5 },
+      px: { xs: 2, md: 3 },
+      background: "linear-gradient(135deg, rgba(63,162,224,0.10), rgba(70,174,247,0.06))",
+    }}
+  >
+    <Box
       sx={{
-                
-        maxWidth: 700,
+        maxWidth: 980,
         mx: "auto",
-        my: 4,
-        borderRadius: 3,
+        borderRadius: 4,
         overflow: "hidden",
-        boxShadow: 4,
+        boxShadow: "0 30px 80px rgba(0,0,0,0.12)",
+        border: "1px solid rgba(0,0,0,0.06)",
+        bgcolor: "white",
       }}
     >
-
-      {/* --- Show custom image or template default image ---*/}
       {(event.event_image_url || template.template_img_url) && (
+      <Box sx={{ position: "relative", height: { xs: 240, md: 340 },
+      overflow: "hidden", bgcolor: event.event_image_url ? "rgba(0,0,0,0.04)" : "transparent", }}>
+        
+           
+          {/* Main image----------*/}
+          <Box
+            component="img"
+            src={event.event_image_url || template.template_img_url}
+            alt="Event cover"
+            sx={{
+              position: "relative",
+              width: "100%",
+              height: "100%",
+              objectFit: event.event_image_url ? "contain" : "cover",   
+              objectPosition: "center",
+            }}
+          />
+        
+        
         <Box
-          component="img"
-          src={event.event_image_url || template.template_img_url}
-          sx={{ width: "100%", height: 360, objectFit: "cover" }}
+          sx={{
+            position: "absolute",
+            inset: 0,
+            height: { xs: 240, md: 340 },
+            background: "linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.55) 100%)",
+          }}
         />
+
+        
+        <Box
+          sx={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            p: { xs: 2.5, md: 4 },
+            color: "white",
+          }}
+        >
+          <Typography sx={{ fontWeight: 700, fontSize: { xs: "0.9rem", md: "1.3rem" } }}>
+            {customizeAction ? "Customize your event" : event.event_title}
+          </Typography>
+
+        </Box>
+      </Box>
       )}
-
-      <Box sx={{ p: 4 }}>
-
+      
+      <Box sx={{ p: { xs: 2.5, md: 4 } }}>
         {/* --- Event Image upload --- */}
         {customizeAction && (
-          <Box sx={{  mb: 4 }}>
-            <Typography variant="h5" sx={{mb: "20px", fontWeight: "bold"}}>Event Information</Typography>
-            <Typography  sx={{ mb: 1,  fontSize: "13px", color: "gray" }}>
+          <Box sx={{ mb: 3 }}>
+            <Typography sx={{ fontWeight: 900, fontSize: "1.1rem", mb: 1 }}>
+              Event Information
+            </Typography>
+
+            <Typography sx={{ mb: 1, fontSize: "0.9rem", color: "text.secondary" }}>
               Event Image (Optional)
             </Typography>
 
-            <input
-              type="file"
-              accept="image/*"
-              
-              onChange={handleUploadImage}
-            />
+            <input type="file" accept="image/*" onChange={handleUploadImage} />
 
             {event.event_image_url && (
-              <Typography variant="body2" sx={{ mt: 1, color: "green" }}>
+              <Typography sx={{ mt: 1, color: "success.main", fontSize: "0.9rem" }}>
                 Event image uploaded
               </Typography>
             )}
           </Box>
         )}
-        
 
-        {/* --- event title --- */}
+        {/* ----- event title ----- */}
         {customizeAction ? (
           <TextField
             fullWidth
-            
             label="Event Title"
             value={event.event_title}
-            onChange={(e) =>
-              setEvent({ ...event, event_title: e.target.value })
-            }
+            onChange={(e) => setEvent({ ...event, event_title: e.target.value })}
           />
         ) : (
-          <Typography variant="h5" fontWeight="bold" sx={{ color: template.primary_color }}>
+          <Typography
+            sx={{
+              fontWeight: 900,
+              fontSize: { xs: "1.6rem", md: "2rem" },
+              color: template.primary_color || "text.primary",
+              lineHeight: 1.15,
+            }}
+          >
             {event.event_title}
           </Typography>
         )}
@@ -205,157 +251,179 @@ function EventPreview(){
             sx={{ mt: 2 }}
             label="Description"
             value={event.description}
-            onChange={(e) =>
-              setEvent({ ...event, description: e.target.value })
-            }
+            onChange={(e) => setEvent({ ...event, description: e.target.value })}
           />
         ) : (
-          <Typography sx={{ mt: 1, color: template.secondary_color }}>
+          <Typography
+            sx={{
+              mt: 1,
+              color: template.secondary_color || "text.secondary",
+              lineHeight: 1.7,
+              maxWidth: 780,
+            }}
+          >
             {event.description}
           </Typography>
         )}
 
-        <Divider sx={{ my: 3}} />
+        <Divider sx={{ my: 3 }} />
 
+        {/* Date / Time / Location*/}
         {customizeAction && (
-          <Typography variant="h5" sx={{mb: "20px", fontWeight: "bold"}}>Date - Time</Typography>
-          
+          <Typography sx={{ fontWeight: 900, fontSize: "1.1rem", mb: 1.2 }}>
+            Date • Time • Location
+          </Typography>
         )}
 
-        <Box sx={{ display: "grid", rowGap: 1.5 }}>
+        
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" },
+            gap: 1.2,
+          }}
+        >
 
-          {/* --- date --- */}
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box component="img" src={dateIcon} sx={{ width: 20, mr: 1 }} />
+           {/* --------------LOCATION------------ */}
+          <Box
+            sx={{
+              borderRadius: 3,
+              border: "1px solid rgba(0,0,0,0.08)",
+              background: "linear-gradient(135deg, rgba(63,162,224,0.08), rgba(70,174,247,0.03))",
+              p: 2,
+              display: "flex",
+              gap: 1.2,
+              alignItems: "flex-start",
+              minWidth: "350px"
+            }}
+          >
+            <Box component="img" src={locationIcon} alt="Location" sx={{ width: 20, height: 20, mt: "2px" }} />
+            <Box sx={{ width: "100%" }}>
+              <Typography sx={{ fontWeight: 900, fontSize: "0.95rem" }}>Location</Typography>
 
-            {customizeAction ? (
-              <Box>
-                                           
-              <TextField
-                type="date"
-                size="small"
-                value={event.start_date || ""}
-                onChange={(e) =>
-                  setEvent({ ...event, start_date: e.target.value })
-                }
-              />
-              </Box>
-            ) : (
-              <Typography>
-                <strong>Date:</strong> {event.start_date}
+              <Typography sx={{ color: "text.secondary", mt: 0.6, lineHeight: 1.5 }}>
+                {event.location || "No location selected"}
               </Typography>
-            )}
+            </Box>
           </Box>
 
-          {/* --- Start Time and end time --- */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Box component="img" src={timeIcon} sx={{ width: 20}} />
 
-            {customizeAction ? (
-              <Box sx={{ display: "flex", gap: 1, width: "100%" }}>
-                
+          {/* ---------DATE ----------*/}
+          <Box
+            sx={{
+              borderRadius: 3,
+              border: "1px solid rgba(0,0,0,0.08)",
+              background: "linear-gradient(135deg, rgba(63,162,224,0.08), rgba(70,174,247,0.03))",
+              p: 2,
+              display: "flex",
+              gap: 1.2,
+              alignItems: "flex-start",
+            }}
+          >
+            <Box component="img" src={dateIcon} alt="Date" sx={{ width: 20, height: 20, mt: "2px" }} />
+            <Box sx={{ width: "100%" }}>
+              <Typography sx={{ fontWeight: 900, fontSize: "0.95rem" }}>Date</Typography>
+
+              {customizeAction ? (
                 <TextField
-                  type="time"
+                  type="date"
                   size="small"
-                  label="Start"
-                  value={event.start_time || ""}
-                  onChange={(e) =>
-                    setEvent({ ...event, start_time: e.target.value })
-                  }
+                  sx={{ mt: 1, width: "100%" }}
+                  value={event.start_date || ""}
+                  onChange={(e) => setEvent({ ...event, start_date: e.target.value })}
                 />
-
-                <TextField
-                  type="time"
-                  size="small"
-                  label="End"
-                  value={event.end_time || ""}
-                  onChange={(e) =>
-                    setEvent({ ...event, end_time: e.target.value })
-                  }
-                />
-
-              
-                
-              </Box>
-              
-
-            ) : (
-              <Typography>
-                <strong>Time:</strong> {event.start_time} - {event.end_time}
-              </Typography>
-            )}
+              ) : (
+                <Typography sx={{ color: "text.secondary", mt: 0.6, lineHeight: 1.5 }}>
+                  {event.start_date}
+                </Typography>
+              )}
+            </Box>
           </Box>
 
-          
-          {customizeAction && (
-          <Divider sx={{ my: 3}} />
-          
-        )}
+          {/* ------------TIME------------- */}
+          <Box
+            sx={{
+              borderRadius: 3,
+              border: "1px solid rgba(0,0,0,0.08)",
+              background: "linear-gradient(135deg, rgba(63,162,224,0.08), rgba(70,174,247,0.03))",
+              p: 2,
+              display: "flex",
+              gap: 1.2,
+              alignItems: "flex-start",
+            }}
+          >
+            <Box component="img" src={timeIcon} alt="Time" sx={{ width: 20, height: 20, mt: "2px" }} />
+            <Box sx={{ width: "100%" }}>
+              <Typography sx={{ fontWeight: 900, fontSize: "0.95rem" }}>Time</Typography>
 
-        {customizeAction && (
-          <Typography variant="h5" sx={{mb: "10px", fontWeight: "bold"}}>Location</Typography>
-          
-        )}
+              {customizeAction ? (
+                <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+                  <TextField
+                    type="time"
+                    size="small"
+                    label="Start"
+                    sx={{ flex: 1 }}
+                    value={event.start_time || ""}
+                    onChange={(e) => setEvent({ ...event, start_time: e.target.value })}
+                  />
+                  <TextField
+                    type="time"
+                    size="small"
+                    label="End"
+                    sx={{ flex: 1 }}
+                    value={event.end_time || ""}
+                    onChange={(e) => setEvent({ ...event, end_time: e.target.value })}
+                  />
+                </Box>
+              ) : (
+                <Typography sx={{ color: "text.secondary", mt: 0.6, lineHeight: 1.5 }}>
+                  {event.start_time} - {event.end_time}
+                </Typography>
+              )}
+            </Box>
+          </Box>
 
          
-         {/* --- Google Map --- */}
-         {event.location_lat && event.location_lng && (
-            <Box>
-
-               <Box sx={{ display: "flex", alignItems: "center", mb: "15px" }}>
-                    <Box component="img" src={locationIcon} sx={{ width: 20, mr: 1 }} />
-                      <Typography>
-                      <strong>Location:</strong> {event.location}
-                      </Typography>
-                  </Box>
-
-                            
-
-                <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-                libraries={["places"]}
-
-                >
-                   {customizeAction && (
-                      <GoogleMapLocation
-                        inputRef={inputRef}
-                        setEvent={setEvent}
-                        setDefaultLocationMarker={setDefaultLocationMarker}
-                        
-                      />
-                    )}
-                <Box sx={{ height: "300px", width: "100%" }}>
-
-                   
-                    <Map
-                    center={{
-                        lat: event.location_lat,
-                        lng: event.location_lng
-                    }}
-                    defaultZoom={14}
-                    mapId={import.meta.env.VITE_MAP_ID}
-                    >
-                    <AdvancedMarker
-                        position={{
-                        lat: event.location_lat,
-                        lng: event.location_lng
-                        }}
-                    >
-                        <Pin background="white" borderColor="purple" glyphColor="purple" />
-                    </AdvancedMarker>
-                    </Map>
-                </Box>
-                </APIProvider>
-
-            </Box>
-            )}
-            
         </Box>
 
+        {/* ---------Google map auto complete-------- */}
+        {event.location_lat && event.location_lng && (
+          <Box sx={{ mt: 2.2 }}>
+            <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={["places"]}>
+            {customizeAction && (
+              <Box sx={{ mb: 1.5 }}>
+                <Typography sx={{ fontWeight: 900, fontSize: "1.1rem", mb: 1 }}>
+                  Update location
+                </Typography>
+                <GoogleMapLocation
+                  inputRef={inputRef}
+                  setEvent={setEvent}
+                  setDefaultLocationMarker={setDefaultLocationMarker}
+                />
+              </Box>
+            )}
+
+            <Box sx={{ height: 320, width: "100%", borderRadius: 3, overflow: "hidden", border: "1px solid rgba(0,0,0,0.08)" }}>
+              
+                <Map
+                  center={{ lat: event.location_lat, lng: event.location_lng }}
+                  defaultZoom={14}
+                  mapId={import.meta.env.VITE_MAP_ID}
+                >
+                  <AdvancedMarker position={{ lat: event.location_lat, lng: event.location_lng }}>
+                    <Pin background="white" borderColor="purple" glyphColor="purple" />
+                  </AdvancedMarker>
+                </Map>
+              
+            </Box>
+            </APIProvider>
+          </Box>
+        )}
+
+        {/* ----------Additional note----------*/}
         {customizeAction ? (
-          <Box sx={{ mt: 2 }}>
-            <Typography
-              sx={{ mb: 1, fontWeight: "bold", fontSize: "16px" }}
-            >
+          <Box sx={{ mt: 2.5 }}>
+            <Typography sx={{ mb: 1, fontWeight: 900, fontSize: "1.05rem" }}>
               Additional Note
             </Typography>
 
@@ -365,48 +433,50 @@ function EventPreview(){
               rows={2}
               placeholder="Enter additional information."
               value={event.additionalNote || ""}
-              onChange={(e) =>
-                setEvent({ ...event, additionalNote: e.target.value })
-              }
-              slotProps={{
-                htmlInput: { maxLength: 100 },
-              }}
+              onChange={(e) => setEvent({ ...event, additionalNote: e.target.value })}
+              slotProps={{ htmlInput: { maxLength: 100 } }}
             />
           </Box>
         ) : (
           event.additionalNote?.trim() && (
-            <Box sx={{ mt: 2 }}>
-              <Typography sx={{ fontWeight: "bold" }}>
-                Additional Note:
-              </Typography>
-              <Typography sx={{ color: "gray" }}>
+            <Box sx={{ mt: 2.5 }}>
+              <Typography sx={{ fontWeight: 900 }}>Additional Note</Typography>
+              <Typography sx={{ color: "text.secondary", mt: 0.5 }}>
                 {event.additionalNote}
               </Typography>
             </Box>
           )
         )}
 
-        <Divider sx={{ mt: 3}} />
-        
-        <Box sx={{ display: "flex", mt: 3, justifyContent: "space-between" }}>
+        <Divider sx={{ mt: 3 }} />
+
+       
+        <Box
+          sx={{
+            mt: 2.5,
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 1.2,
+            justifyContent: "flex-end",
+          }}
+        >
           {!customizeAction && (
             <>
-             <Button
-                variant="contained"
-                sx={{ bgcolor: "#037e20"}}
+              <Button
+                variant="outlined"
                 onClick={() => setCustomizeAction(true)}
+                sx={{ borderRadius: 2.2, fontWeight: 800 }}
               >
                 Customize
               </Button>
+
               <Button
                 variant="contained"
-                sx={{ bgcolor: "#3a9ad6"}}
                 onClick={handlePublishButton}
+                sx={{ borderRadius: 2.2, fontWeight: 800, bgcolor: "#3a9ad6", "&:hover": { bgcolor: "#3a9ad6", opacity: 0.92 } }}
               >
                 Publish Event
               </Button>
-
-             
             </>
           )}
 
@@ -414,28 +484,26 @@ function EventPreview(){
             <>
               <Button
                 variant="contained"
-                color="success"
                 onClick={handleUpdateButton}
+                sx={{ borderRadius: 2.2, fontWeight: 800, bgcolor: "#037e20", "&:hover": { bgcolor: "#037e20", opacity: 0.92 } }}
               >
                 Save Changes
               </Button>
 
               <Button
                 variant="outlined"
-                
                 onClick={() => setCustomizeAction(false)}
+                sx={{ borderRadius: 2.2, fontWeight: 800 }}
               >
                 Cancel
               </Button>
             </>
           )}
         </Box>
-      
-
-
       </Box>
     </Box>
-  );
+  </Box>
+);
 }
 export default EventPreview;
 

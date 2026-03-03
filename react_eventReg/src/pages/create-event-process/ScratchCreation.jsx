@@ -192,8 +192,12 @@ function ScratchCreation() {
 
 
   return (
+    <Box sx={{background: "linear-gradient(135deg, rgba(63,162,224,0.10), rgba(70,174,247,0.06))",}}>
+
+    
       <Box sx={{ display: "flex",justifyContent: "center",
-            alignItems: "center", m: "20px"}}>
+            
+            alignItems: "center"}}>
         
 
         <Box
@@ -201,7 +205,8 @@ function ScratchCreation() {
                       
             display: "flex",
             p: "10px",
-            
+            m: 6,
+            bgcolor: "white",
             height: "auto",
             boxShadow: 2,
             borderRadius: 3,
@@ -226,7 +231,7 @@ function ScratchCreation() {
           >
           <Box
             sx={{
-              backgroundColor: "#f4f0f7",
+              backgroundColor: "#d3e9f0",
               
               p: 1,
               borderRadius: 2,
@@ -500,6 +505,7 @@ function ScratchCreation() {
             </Button>
           </Box>
         </Box>
+      </Box>
       </Box>
     );
 }
