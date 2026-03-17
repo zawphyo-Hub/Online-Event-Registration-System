@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, Drawer, List, ListItem, ListItemText, Card, CardContent, CardActions, Button, Chip, Grid, colors } from "@mui/material";
+import { Box, Typography, Drawer, List, ListItem, ListItemText, Card, CardContent, CardActions, Button, Chip, Grid, colors, 
+  Paper, Divider, Container, Stack
+ } from "@mui/material";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
@@ -68,158 +70,377 @@ function EventDashboard() {
   };  
 
   return (
-    <Box >
-        <Navbar />
+    <Box sx={{ minHeight: "100vh", bgcolor: "#f8fafc" }}>
+      <Navbar />
 
-            
-        <Box sx={{ flexGrow: 1, p: 4}}>
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
+        
+        <Box
+          sx={{
+            mb: 4,
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "flex-start", md: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          <Box>
+            <Typography
+              sx={{
+                fontWeight: 800,
+                fontSize: { xs: "1.5rem", md: "1.8rem" },
+                color: "#0f172a",
+                lineHeight: 1.1,
+              }}
+            >
+              Event Dashboard
+            </Typography>
+           
+          </Box>
 
           
-          {!loading && events.length === 0 &&(
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              
-              <Typography>No events has been created.</Typography>
+        </Box>
+
+        {/* -------------summary */}
+        <Paper
+          elevation={0}
+          sx={{
+            mb: 4,
+            p: 2.5,
+            borderRadius: 4,
+            border: "1px solid #e2e8f0",
+            bgcolor: "#ffffff",
+          }}
+        >
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={{ xs: 2, sm: 4 }}
+            divider={<Divider orientation="vertical" flexItem sx={{ display: { xs: "none", sm: "block" } }} />}
+          >
+            <Typography sx={{fontWeight: 600}}>Summary</Typography>
+            <Box>
+              <Typography sx={{ fontSize: 13, color: "#94a3b8" }}>
+                Total Events
+              </Typography>
+              <Typography sx={{ mt: 0.5, fontWeight: 500, fontSize: "1.3rem", color: "#0f172a" }}>
+                {events.length}
+              </Typography>
             </Box>
-          )}
-          
-         {!loading && events.length > 0 && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            {events.map((event) => (
-              <Card
-                key={event.eventId}
-                elevation={3}
-                sx={{ display: "flex", flexDirection: "column" }}
-              >
-                <CardContent>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <Typography variant="h5" sx={{ color: "#000000", fontWeight: 550 }}>
-                            {event.event_title}
+
+            <Box>
+              <Typography sx={{ fontSize: 13, color: "#94a3b8" }}>
+                Published Events
+              </Typography>
+              <Typography sx={{ mt: 0.5, fontWeight: 500, fontSize: "1.3rem", color: "#0f172a" }}>
+                {events.filter((event) => event.status === "PUBLISHED").length}
+              </Typography>
+            </Box>
+
+            <Box>
+              <Typography sx={{ fontSize: 13, color: "#94a3b8" }}>
+                Unpublished Events
+              </Typography>
+              <Typography sx={{ mt: 0.5, fontWeight: 500, fontSize: "1.3rem", color: "#0f172a" }}>
+                {events.filter((event) => event.status !== "PUBLISHED").length}
+              </Typography>
+            </Box>
+          </Stack>
+        </Paper>
+
+        {/* Loading state */}
+        {loading && (
+          <Paper
+            elevation={0}
+            sx={{
+              p: 5,
+              borderRadius: 4,
+              border: "1px solid #e2e8f0",
+              bgcolor: "#ffffff",
+              textAlign: "center",
+            }}
+          >
+            <Typography sx={{ color: "#64748b", fontSize: "1rem" }}>
+              Loading your events...
+            </Typography>
+          </Paper>
+        )}
+
+        {/* Empty state */}
+        {!loading && events.length === 0 && (
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 4, md: 6 },
+              borderRadius: 4,
+              border: "1px solid #e2e8f0",
+              bgcolor: "#ffffff",
+              textAlign: "center",
+            }}
+          >
+            <Box
+              sx={{
+                width: 70,
+                height: 70,
+                mx: "auto",
+                mb: 2,
+                borderRadius: "50%",
+                bgcolor: "#eff6ff",
+              }}
+            />
+            <Typography
+              sx={{
+                fontWeight: 800,
+                fontSize: "1.2rem",
+                color: "#0f172a",
+              }}
+            >
+              No events created yet
+            </Typography>
+            <Typography
+              sx={{
+                mt: 1,
+                color: "#64748b",
+                maxWidth: 500,
+                mx: "auto",
+                lineHeight: 1.8,
+              }}
+            >
+              Start by creating your first event page and share it with your attendees.
+            </Typography>
+
+            <Button
+              variant="contained"
+              component={Link}
+              to="/template-selection"
+              sx={{
+                mt: 3,
+                borderRadius: 3,
+                px: 3,
+                py: 1.2,
+                textTransform: "none",
+                fontWeight: 700,
+                boxShadow: "none",
+              }}
+            >
+              Create Your First Event
+            </Button>
+          </Paper>
+        )}
+
+        {/* --------------Events list */}
+        {!loading && events.length > 0 && (
+          <Stack spacing={3}>
+            {events.map((event, index) => {
+              const isPublished = event.status === "PUBLISHED";
+
+              return (
+                <Card
+                  key={event.eventId}
+                  elevation={0}
+                  sx={{
+                    borderRadius: 4,
+                    border: "1px solid #e2e8f0",
+                    bgcolor: "#ffffff",
+                    overflow: "hidden",
+                    transition: "0.2s ease",
+                    "&:hover": {
+                      boxShadow: "0 16px 35px rgba(15, 23, 42, 0.08)",
+                      transform: "translateY(-2px)",
+                    },
+                  }}
+                >
+                  <CardContent sx={{ p: { xs: 2.2, md: 3 } }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", md: "row" },
+                        justifyContent: "space-between",
+                        alignItems: { xs: "flex-start", md: "flex-start" },
+                        gap: 2,
+                      }}
+                    >
+                      <Box sx={{ flex: 1 }}>
+                        
+                        <Typography
+                          sx={{
+                            fontWeight: 800,
+                            fontSize: { xs: "1.2rem", md: "1.35rem" },
+                            color: "#0f172a",
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          {index + 1}. {event.event_title}
                         </Typography>
 
-                        <Typography
-                            sx={{
-                            p: "10px",
-                            borderRadius: "20px",
-                            fontSize: "14px" ,                           
-                            backgroundColor:
-                                event.status === "PUBLISHED" ? "#e6f4ea" : "#fdecea",
-                            color:
-                                event.status === "PUBLISHED" ? "#009222" : "#ae0000",
-                            }}
-                        >
-                            {event.status}
-                        </Typography>
+                        
+                      </Box>
+
+                      <Chip
+                        label={event.status}
+                        sx={{
+                          fontWeight: 700,
+                          borderRadius: "999px",
+                          bgcolor: isPublished ? "#e8f7ee" : "#fff1f2",
+                          color: isPublished ? "#0f8a43" : "#c2410c",
+                          border: isPublished
+                            ? "1px solid #b7ebc6"
+                            : "1px solid #fed7aa",
+                        }}
+                      />
                     </Box>
 
-                  <Typography  sx={{color:"gray"}}>
-                    <strong style={{paddingRight: "5px"}}>Date:</strong> {event.start_date}
-                    
-                  </Typography>
+                    <Box
+                      sx={{
+                        mt: 3,
+                        display: "grid",
+                        gridTemplateColumns: { xs: "1fr", sm: "repeat(3, 1fr)" },
+                        gap: 2,
+                      }}
+                    >
+                      <Paper
+                        elevation={0}
+                        sx={{
+                          p: 2,
+                          borderRadius: 3,
+                          bgcolor: "#f8fafc",
+                          border: "1px solid #e2e8f0",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: 13, color: "#94a3b8", mb: 0.5 }}>
+                          Date
+                        </Typography>
+                        <Typography sx={{ fontWeight: 700, color: "#0f172a" }}>
+                          {event.start_date}
+                        </Typography>
+                      </Paper>
 
-                  <Typography  sx={{color:"gray"}}>
-                    <strong style={{paddingRight: "5px"}}>Time:</strong> 
-                    {event.start_time} - {event.end_time}
-                  </Typography>
+                      <Paper
+                        elevation={0}
+                        sx={{
+                          p: 2,
+                          borderRadius: 3,
+                          bgcolor: "#f8fafc",
+                          border: "1px solid #e2e8f0",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: 13, color: "#94a3b8", mb: 0.5 }}>
+                          Time
+                        </Typography>
+                        <Typography sx={{ fontWeight: 700, color: "#0f172a" }}>
+                          {event.start_time} - {event.end_time}
+                        </Typography>
+                      </Paper>
 
-                 
-                    <Typography  sx={{color:"gray"}}>
-                      <strong style={{paddingRight: "5px"}}>Location:</strong> {event.location}
-                    </Typography>
-                  
+                      <Paper
+                        elevation={0}
+                        sx={{
+                          p: 2,
+                          borderRadius: 3,
+                          bgcolor: "#f8fafc",
+                          border: "1px solid #e2e8f0",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: 13, color: "#94a3b8", mb: 0.5 }}>
+                          Location
+                        </Typography>
+                        <Typography sx={{ fontWeight: 700, color: "#0f172a" }}>
+                          {event.location || "Not specified"}
+                        </Typography>
+                      </Paper>
+                    </Box>
+                  </CardContent>
 
-                
-                </CardContent>
+                  <Divider />
 
-                <CardActions
-                  sx={{
-                    px: 2,
-                    pb: 2,
-                    pt: 0,
-                    display: "flex",
-                    flexDirection: { xs: "column", sm: "row" },
-                    alignItems: { xs: "stretch", sm: "center" },
-                    justifyContent: { xs: "flex-start", sm: "space-between" },
-                    "& > :not(style) + :not(style)": {
-                      marginLeft: 0,
-                    },
-                    gap: 1.2,
-                  }}
-                  >
-                  
-                  <Box
+                  <CardActions
                     sx={{
+                      p: { xs: 2, md: 2.5 },
                       display: "flex",
-                      flexWrap: "wrap",
-                      gap: 1,
-                      width: { xs: "100%", sm: "auto" },
+                      flexDirection: { xs: "column", lg: "row" },
+                      alignItems: { xs: "stretch", lg: "center" },
+                      justifyContent: "space-between",
+                      gap: 2,
                     }}
                   >
-                    <Button
-                      variant="contained"
-                      component={Link}
-                      to={`/attendee-management/${event.eventId}`}
-                      sx={{
-                        borderRadius: 2,
-                        fontWeight: 700,
-                        width: { xs: "100%", sm: "auto" },
-                      }}
+                    <Stack
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={1.2}
+                      sx={{ width: { xs: "100%", lg: "auto" } }}
                     >
-                      Manage Attendees
-                    </Button>
-
-                    <Button
-                      variant="contained"
-                      component={Link}
-                      to={`/event-preview/${event.slug}`}
-                      sx={{
-                        borderRadius: 2,
-                        fontWeight: 700,
-                        width: { xs: "100%", sm: "auto" },
-                      }}
-                    >
-                      Edit Event
-                    </Button>
-
-                    {event.status === "PUBLISHED" && (
                       <Button
-                        variant="outlined"
-                        onClick={() => copyLink(event.slug)}
+                        variant="contained"
+                        component={Link}
+                        to={`/attendee-management/${event.eventId}`}
                         sx={{
-                          borderRadius: 2,
+                          borderRadius: 2.5,
                           fontWeight: 700,
+                          textTransform: "none",
+                          boxShadow: "none",
                           width: { xs: "100%", sm: "auto" },
                         }}
                       >
-                        Copy Link
+                        Manage Attendees
                       </Button>
-                    )}
-                  </Box>
 
-                  
-                  <Button
-                    variant="outlined"
-                    onClick={() => handleDelete(event.eventId)}
-                    sx={{
-                      width: { xs: "100%", sm: "auto" },
-                      borderRadius: 2,
-                      fontWeight: 700,
-                      
-                      borderColor: "rgba(200,0,0,0.6)",
-                      color: "rgba(200,0,0,0.9)",
-                                                           
-                    }}
-                  >
-                    Delete
-                  </Button>
+                      <Button
+                        variant="outlined"
+                        component={Link}
+                        to={`/event-preview/${event.slug}`}
+                        sx={{
+                          borderRadius: 2.5,
+                          fontWeight: 700,
+                          textTransform: "none",
+                          width: { xs: "100%", sm: "auto" },
+                        }}
+                      >
+                        Edit Event
+                      </Button>
+
+                      {isPublished && (
+                        <Button
+                          variant="outlined"
+                          onClick={() => copyLink(event.slug)}
+                          sx={{
+                            borderRadius: 2.5,
+                            fontWeight: 700,
+                            textTransform: "none",
+                            width: { xs: "100%", sm: "auto" },
+                          }}
+                        >
+                          Copy Link
+                        </Button>
+                      )}
+                    </Stack>
+
+                    <Button
+                      variant="outlined"
+                      onClick={() => handleDelete(event.eventId)}
+                      sx={{
+                        borderRadius: 2.5,
+                        fontWeight: 700,
+                        textTransform: "none",
+                        width: { xs: "100%", lg: "auto" },
+                        borderColor: "#fecaca",
+                        color: "#dc2626",
+                        "&:hover": {
+                          borderColor: "#ef4444",
+                          bgcolor: "#fef2f2",
+                        },
+                      }}
+                    >
+                      Delete Event
+                    </Button>
                   </CardActions>
-              </Card>
-            ))}
-          </Box> )}
-        </Box>
-      </Box>
-    
-    
+                </Card>
+              );
+            })}
+          </Stack>
+        )}
+      </Container>
+    </Box>
   );
+
 }
 
 export default EventDashboard;

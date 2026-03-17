@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import {Box, Typography, Card, Table, TableHead, TableRow, TableCell, TableBody, Button, TextField, Select, MenuItem} from "@mui/material";
+import {Box, Typography, Card, Table, TableHead, TableRow, TableCell, TableBody, Button, 
+  TextField, Select, MenuItem, Paper, Stack, Divider} from "@mui/material";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -71,9 +72,62 @@ function AttendeeManagement() {
         <Navbar></Navbar>
     
     <Box sx={{ p: 4 }}>
-      <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-        Management Attendees
-      </Typography>
+      <Box
+          sx={{
+            mb: 4,
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "flex-start", md: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          <Box>
+            <Typography
+              sx={{
+                fontWeight: 800,
+                fontSize: { xs: "1.5rem", md: "1.7rem" },
+                color: "#0f172a",
+                lineHeight: 1.1,
+              }}
+            >
+              Attendee Dashboard
+            </Typography>
+
+            {/* -------------summary */}
+              <Paper
+                elevation={0}
+                sx={{
+                  mt: 3,
+                  p: 2.5,
+                  borderRadius: 4,
+                  border: "1px solid #e2e8f0",
+                  bgcolor: "#ffffff",
+                }}
+              >
+                <Stack
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={{ xs: 2, sm: 4 }}
+                  divider={<Divider orientation="vertical" flexItem sx={{ display: { xs: "none", sm: "block" } }} />}
+                >
+                  <Typography sx={{fontWeight: 600}}>Summary</Typography>
+                  <Box>
+                    <Typography sx={{ fontSize: 13, color: "#94a3b8" }}>
+                      Total Attendees
+                    </Typography>
+                    <Typography sx={{ mt: 0.5, fontWeight: 500, fontSize: "1.3rem", color: "#0f172a" }}>
+                      {attendees.length}
+                    </Typography>
+                  </Box>
+      
+                  
+                </Stack>
+              </Paper>
+           
+          </Box>
+
+          
+        </Box>
 
       <Card sx={{ p: 2 }}>
         <Table>

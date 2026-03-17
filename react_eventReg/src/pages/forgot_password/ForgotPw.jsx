@@ -1,5 +1,6 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { toast } from "react-toastify";
 import logo from "../../assets/logo3.png";
@@ -7,6 +8,7 @@ import logo from "../../assets/logo3.png";
 function ForgotPw() {
   const [email, setEmail] = useState("");
   const[emailError, setEmailError] = useState("");
+  const navigate = useNavigate();
 
   const validateInputs = () => {
     let isValid = true;
@@ -15,6 +17,10 @@ function ForgotPw() {
     // ---- Email Error Message ----
     if(!email){
       setEmailError("Email is required.");
+      isValid = false;
+    }
+    else if(!/\S+@\S+\.\S+/.test(email)){
+      setEmailError("Incorrect Email.");
       isValid = false;
     }
     else{
@@ -42,6 +48,7 @@ function ForgotPw() {
       );
 
       toast.success("We've send you a reset link.");
+      navigate("/login");
       
     } catch (error) {
       if(error.response && error.response.data && error.response.data.message){
@@ -62,6 +69,7 @@ function ForgotPw() {
         justifyContent: "center",
         alignItems: "center",
         background: "radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%)",
+        p: 1
       }}
     >
       <Box

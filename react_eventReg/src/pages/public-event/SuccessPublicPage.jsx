@@ -20,7 +20,7 @@ function SuccessPublicPage() {
       sx={{
         minHeight: "100vh",
         display: "flex",
-        
+        m: 1,
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
@@ -30,12 +30,14 @@ function SuccessPublicPage() {
     >
       <Box sx={{maxWidth: 550,
           width: "100%",
+          boxSizing: "border-box",
           borderRadius: 4,
           display: "flex",
         
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        // overflow: "hidden",
         p: "30px",
           boxShadow: 3,
         gap: 2, }}

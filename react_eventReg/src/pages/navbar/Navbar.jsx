@@ -27,7 +27,7 @@ function Navbar() {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between", m: "20px" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", m: "20px" }}>
         
         
         <Box sx={{ display: "flex" }}>
@@ -47,7 +47,7 @@ function Navbar() {
         
         <IconButton
           onClick={() => setOpen(true)}
-          sx={{ display: { xs: "flex", md: "none" } }}
+          sx={{ display: { xs: "flex", md: "none",  } }}
         >
           <Box component="img" src={MenuIconImg} alt="Menu" sx={{ height: 30, width: 30 }} />
         </IconButton>

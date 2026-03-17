@@ -19,7 +19,7 @@ function Home() {
         sx={{
           bgcolor: "#fff",
           borderRadius: 3,
-          boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+          // boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           maxWidth: 1000,
@@ -50,9 +50,9 @@ function Home() {
           <Typography
             variant="h4"
             sx={{
-              fontWeight: 700,
+              fontWeight: 600,
               lineHeight: 1.15,
-              fontSize: { xs: "1.8rem", md: "2.2rem" },
+              fontSize: { xs: "1.7rem", md: "2rem" },
               letterSpacing: "-0.02em",
             }}
           >

@@ -52,10 +52,13 @@ function EventPreview(){
       );
 
       toast.info(
-        <div style={{padding: "5px", height: "30px", width: "300px"}}>
-     
-          "Please wait while we are publishing your event..."
-        </div>
+        "Please wait while we are publishing your event...",
+        {
+          style: {
+            width: "420px"
+          }
+        }
+      
        
     );
 
