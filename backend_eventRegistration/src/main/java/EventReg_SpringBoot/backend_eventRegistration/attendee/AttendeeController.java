@@ -86,7 +86,7 @@ public class AttendeeController {
 
         if (Boolean.TRUE.equals(attendee.getIsVerified())) {
             return ResponseEntity.badRequest().body(
-                    Map.of("status", "ERROR", "message", "QR Code Already Used."));
+                    Map.of("status", "ERROR", "message", "This QR Code has already been used."));
         }
 
         // First scan, set to true

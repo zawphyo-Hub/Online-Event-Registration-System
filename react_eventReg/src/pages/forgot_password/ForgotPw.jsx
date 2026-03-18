@@ -68,7 +68,9 @@ function ForgotPw() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%)",
+         background:
+            "linear-gradient(135deg, #0f172a 0%, #0f3d68 45%, #0b84d8 100%)",
+        // background: "radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%)",
         p: 1
       }}
     >

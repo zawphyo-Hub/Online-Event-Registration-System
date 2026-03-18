@@ -24,6 +24,7 @@ import GoogleLoginHandler from "./pages/oauthHandler/GoogleLoginHandler";
 import ForgotPw from "./pages/forgot_password/ForgotPw";
 import ResetLinkPage from "./pages/forgot_password/ResetLinkPage";
 import Footer from "./pages/footer/Footer";
+import VerificationBuiltIn from "./pages/verification/VerificationBuiltIn";
 
 function App() {
 
@@ -58,7 +59,7 @@ function App() {
                 <Route path="/forgot-pw" element={<ForgotPw/>} />
                 <Route path="/reset-password" element={<ResetLinkPage/>} />
                 <Route path="/footer" element={<Footer/>} />
-                
+                <Route path="/verify-builtin" element={<VerificationBuiltIn/>} />
                 
                 
                 

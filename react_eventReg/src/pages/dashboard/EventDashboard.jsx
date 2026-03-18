@@ -70,10 +70,14 @@ function EventDashboard() {
   };  
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#f8fafc" }}>
+    <Box sx={{ minHeight: "100vh"}}>
       <Navbar />
+      <Box sx={{background:
+            "linear-gradient(135deg, #0f172a 0%, #0f3d68 45%, #0b84d8 100%)",}}>
 
-      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
+      
+
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 },  }}>
         
         <Box
           sx={{
@@ -90,8 +94,8 @@ function EventDashboard() {
               sx={{
                 fontWeight: 800,
                 fontSize: { xs: "1.5rem", md: "1.8rem" },
-                color: "#0f172a",
-                lineHeight: 1.1,
+                color: "#fafafa",
+                
               }}
             >
               Event Dashboard
@@ -113,6 +117,7 @@ function EventDashboard() {
             bgcolor: "#ffffff",
           }}
         >
+          
           <Stack
             direction={{ xs: "column", sm: "row" }}
             spacing={{ xs: 2, sm: 4 }}
@@ -178,16 +183,7 @@ function EventDashboard() {
               textAlign: "center",
             }}
           >
-            <Box
-              sx={{
-                width: 70,
-                height: 70,
-                mx: "auto",
-                mb: 2,
-                borderRadius: "50%",
-                bgcolor: "#eff6ff",
-              }}
-            />
+            
             <Typography
               sx={{
                 fontWeight: 800,
@@ -438,6 +434,7 @@ function EventDashboard() {
           </Stack>
         )}
       </Container>
+    </Box>
     </Box>
   );
 

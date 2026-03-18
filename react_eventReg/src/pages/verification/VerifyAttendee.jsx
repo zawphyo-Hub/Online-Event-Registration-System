@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import logo from "../../assets/logo3.png";
-import { Box, Typography, Card } from "@mui/material";
+import { Box, Typography, Card, CardContent, Divider } from "@mui/material";
 import correctIcon from "../../assets/check.png";
 
 function VerifyAttendee() {
@@ -65,8 +65,15 @@ function VerifyAttendee() {
                 sx={{ width: "30px", height: "30px"}}
                 />
                 
-                <Typography variant="h5" color="green" fontWeight="bold">
-                  VERIFIED.
+                <Typography
+                    sx={{
+                      fontWeight: 900,
+                      color: "error.main",
+                      fontSize: { xs: "1.3rem", md: "1.5rem" },
+                      mb: 1.5,
+                    }}
+                  >
+                  VERIFIED ATTENDEE
                 </Typography>
 
             </Box>
@@ -85,10 +92,23 @@ function VerifyAttendee() {
             </Typography>
           </Box>
         ) : (
-          <Typography variant="h6" color="red" fontWeight="bold">
-            {error}
-          </Typography>
-        )}
+          <Box>
+                  <Typography
+                    sx={{
+                      fontWeight: 900,
+                      color: "error.main",
+                      fontSize: { xs: "1.3rem", md: "1.5rem" },
+                      mb: 1.5,
+                    }}
+                  >
+                    Verification Failed
+                  </Typography>
+
+                  <Typography sx={{ color: "text.secondary", lineHeight: 1.7 }}>
+                    {error}
+                  </Typography>
+                </Box>
+            )}
       </Card>
     </Box>
   );

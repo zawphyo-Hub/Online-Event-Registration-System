@@ -19,9 +19,13 @@ function Navbar() {
       <Button component={Link} to="/template-selection" sx={{ color: "black", fontWeight: 600 }} onClick={onClick}>
         Create Events
       </Button>
+      <Button component={Link} to="/verify-builtin" sx={{ color: "black", fontWeight: 600 }} onClick={onClick}>
+        Verification
+      </Button>
       <Button component={Link} to="/profile" sx={{ color: "black", fontWeight: 600 }} onClick={onClick}>
         Profile
       </Button>
+      
     </>
   );
 

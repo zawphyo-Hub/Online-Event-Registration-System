@@ -10,7 +10,9 @@ function Home() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundImage: "radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);",
+        // backgroundImage: "radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);",
+        background:
+            "linear-gradient(135deg, #0f172a 0%, #0f3d68 45%, #0b84d8 100%)",
         px: 2,
       }}
     >
@@ -34,7 +36,9 @@ function Home() {
         <Box
           sx={{
             flex: 1,
-            bgcolor: "#209ae6",
+            // bgcolor: "#034f7e",
+             background:
+            "linear-gradient(135deg, #0f172a 0%, #0f3d68 45%, #0b84d8 100%)",
             color: "white",
             p: { xs: 3, md: 7 },
             display: "flex",
@@ -50,9 +54,9 @@ function Home() {
           <Typography
             variant="h4"
             sx={{
-              fontWeight: 600,
+              fontWeight: 800,
               lineHeight: 1.15,
-              fontSize: { xs: "1.7rem", md: "2rem" },
+              fontSize: { xs: "1.6rem", md: "1.9rem" },
               letterSpacing: "-0.02em",
             }}
           >

@@ -71,7 +71,11 @@ function AttendeeManagement() {
     <Box>
         <Navbar></Navbar>
     
-    <Box sx={{ p: 4 }}>
+    <Box sx={{minHeight: "87vh",background:
+            "linear-gradient(135deg, #0f172a 0%, #0f3d68 45%, #0b84d8 100%)",}}>
+
+    
+    <Box sx={{ p: 4,  }}>
       <Box
           sx={{
             mb: 4,
@@ -87,7 +91,7 @@ function AttendeeManagement() {
               sx={{
                 fontWeight: 800,
                 fontSize: { xs: "1.5rem", md: "1.7rem" },
-                color: "#0f172a",
+                color: "#fcfcfc",
                 lineHeight: 1.1,
               }}
             >
@@ -105,6 +109,7 @@ function AttendeeManagement() {
                   bgcolor: "#ffffff",
                 }}
               >
+                
                 <Stack
                   direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 2, sm: 4 }}
@@ -255,6 +260,7 @@ function AttendeeManagement() {
           </TableBody>
         </Table>
       </Card>
+    </Box>
     </Box>
     </Box>
   );
