@@ -127,7 +127,7 @@ function Signup(){
 
   // Google Sign Up handle
   const handleGoogleSignup = () => {
-      window.location.href = "http://localhost:8080/oauth2/authorization/google"
+      window.location.replace("http://localhost:8080/oauth2/authorization/google");
 
   }
   
@@ -327,7 +327,7 @@ function Signup(){
         <Typography
           sx={{ textAlign: "center", mt: 3, fontSize: 14 }}
         >
-          Don't have an account?
+          Already have an account?
           <Typography
             component={Link}
             to="/login"

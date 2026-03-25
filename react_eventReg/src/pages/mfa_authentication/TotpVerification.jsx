@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextField, Button, Typography, Box } from '@mui/material';
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -13,18 +13,123 @@ function TotpVerification(){
     const [verificationCode, setVerificationCode] = useState("");
     const { email } = location.state || {};
 
+
+    const[verifyError, setVerifyError] = useState("");
+    const validateInputs = () => {
+        let isValid = true;
+
+    
+        // ---- Email Error Message ----
+        if(!verificationCode){
+            setVerifyError("This field is required.");
+            isValid = false;
+        }
+        else{
+         setVerifyError("")
+        }
+        return isValid;
+
+    }
+
+    // ---------- TOTP block time ----------
+    const [remainingTime, setRemainingTime] = useState(0);
+    const [blockedEmail, setBlockedEmail] = useState("");
+    const maxAttempt = 5;
+    const blockTime = 5 * 60 * 1000; // 5 mins
+
+    const getStorageKey = (email) => `totpBlockState_${email.toLowerCase()}`;
+
+    const getTotpState = (email) => {
+        const state = JSON.parse(localStorage.getItem(getStorageKey(email))) || {
+        attempts: 0,
+        blockedUntil: null,
+        };
+
+        if (state.blockedUntil && Date.now() >= state.blockedUntil) {
+        const resetState = { attempts: 0, blockedUntil: null };
+        localStorage.setItem(getStorageKey(email), JSON.stringify(resetState));
+        return resetState;
+        }
+
+        return state;
+    };
+
+    const setTotpState = (email, state) => {
+        localStorage.setItem(getStorageKey(email), JSON.stringify(state));
+    };
+
+    const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, "0")}`;
+    };
+
+
+    // restore block state on page load
+    useEffect(() => {
+        if (!email) return;
+
+        const state = getTotpState(email);
+
+        if (state.blockedUntil && Date.now() < state.blockedUntil) {
+        setBlockedEmail(email.toLowerCase());
+        const remaining = Math.ceil((state.blockedUntil - Date.now()) / 1000);
+        setRemainingTime(remaining);
+        }
+    }, [email]);
+
+    // timer for unblocking the page
+    useEffect(() => {
+        if (!blockedEmail) return;
+
+        const interval = setInterval(() => {
+        const state = getTotpState(blockedEmail);
+
+        if (state.blockedUntil && Date.now() < state.blockedUntil) {
+            const remaining = Math.ceil((state.blockedUntil - Date.now()) / 1000);
+            setRemainingTime(remaining);
+        } else {
+            setRemainingTime(0);
+            setBlockedEmail("");
+        }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [blockedEmail]);
+
     const handleNumberOnly = (e) => {
         const numberValue = e.target.value.replace(/\D/g, ""); // restricted to number only
         setVerificationCode(numberValue);
         
     };
     const handleVerify = async () => {
+
+        const isValid = validateInputs();
+
+        if (!isValid) {
+            return;
+        }
+        const state = getTotpState(email);
+
+        // blocked
+        if (state.blockedUntil && Date.now() < state.blockedUntil) {
+        const remaining = Math.ceil((state.blockedUntil - Date.now()) / 1000);
+        setBlockedEmail(email.toLowerCase());
+        setRemainingTime(remaining);
+        toast.error(`Too many attempts. Try again in ${formatTime(remaining)}.`);
+        return;
+        }
         
         try {
         const res = await axios.post("http://localhost:8080/EventApi/authentication/verification", {
             email,
             verificationCode,
         });
+
+            // if success, reset attempts
+            setTotpState(email, { attempts: 0, blockedUntil: null });
+            setBlockedEmail("");
+            setRemainingTime(0);
 
             // Store user info in localStorage
             localStorage.setItem("user", JSON.stringify(res.data));
@@ -34,9 +139,37 @@ function TotpVerification(){
             navigate("/mainpage");
         
         } catch (err) {
-        
-        toast.error(err.response?.data?.message || "Verification Error.");
+        const latestState = getTotpState(email);
+        let newAttempts = latestState.attempts + 1;
+        let blockedUntil = null;
+
+        if (newAttempts >= maxAttempt) {
+            blockedUntil = Date.now() + blockTime;
+
+            setTotpState(email, {
+            attempts: newAttempts,
+            blockedUntil,
+            });
+
+            setBlockedEmail(email.toLowerCase());
+            setRemainingTime(Math.ceil((blockedUntil - Date.now()) / 1000));
+
+            toast.error("Too many incorrect codes. Try again in 5 minutes.");
+        } else {
+            setTotpState(email, {
+            attempts: newAttempts,
+            blockedUntil: null,
+            });
+
+            if (err.response?.data?.message) {
+            toast.error(`${err.response.data.message} (${newAttempts}/${maxAttempt})`);
+            } else {
+            toast.error(`Verification Failed. Attempt ${newAttempts} of ${maxAttempt}`);
+            }
+            
         }
+        }
+       
     };
 
      if (!email) {
@@ -118,7 +251,8 @@ function TotpVerification(){
                     <TextField
                         label="6-digit code"
                         variant="outlined"
-                        
+                        helperText={verifyError}
+                        error={Boolean(verifyError)}
                         value={verificationCode}
                         onChange={handleNumberOnly}
                         
@@ -127,16 +261,27 @@ function TotpVerification(){
                     <Button 
                     variant="contained" 
                     onClick={handleVerify}
-                    sx={{bgcolor: "#3a9ad6",
-                
+                    sx={{bgcolor: "#3a9ad6"}}
+                    disabled={remainingTime > 0}         
                         
-                        
-                    }}
-                    
+                                        
                     >
                         Verify
                     </Button>
                     </Box>
+
+                    {remainingTime > 0 && (
+                    <Typography
+                        sx={{
+                        mt: 1,
+                        textAlign: "center",
+                        fontSize: 13,
+                        color: "red",
+                        }}
+                    >
+                        Try again in {formatTime(remainingTime)}
+                    </Typography>
+                    )}
                     
             </Box>
             

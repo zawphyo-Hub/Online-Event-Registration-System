@@ -6,6 +6,11 @@ import GoogleMapLocation from "./GoogleMapLocation";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { useNavigate, useLocation } from "react-router-dom";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 function ScratchCreation() {
 
@@ -14,6 +19,20 @@ function ScratchCreation() {
   // user id from local storage
   const loginUser = JSON.parse(localStorage.getItem("user"));
   const userId = loginUser?.userId; 
+
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+     
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+      return;
+    }
+
+    
+  }, []);
 
   
   // Carry Template ID
@@ -189,10 +208,25 @@ function ScratchCreation() {
       }
     
     };
+    if(!userId)
+    return (
+        <Box 
+        sx={{fontSize: "17px", display: "flex",
+          justifyContent: "center", mt: "30px",
+        }}
+        >Loading...
+        </Box>
+        )
+
+    
 
 
   return (
-    <Box sx={{background: "linear-gradient(135deg, rgba(63,162,224,0.10), rgba(70,174,247,0.06))",}}>
+    <Box sx={{
+      // background: "linear-gradient(135deg, rgba(19, 104, 156, 0.1), rgba(70,174,247,0.06))",
+      //  background:
+      //       "linear-gradient(135deg, #0f172a 0%, #0f3d68 45%, #0b84d8 100%)",
+      }}>
 
     
       <Box sx={{ display: "flex",justifyContent: "center",
@@ -208,7 +242,7 @@ function ScratchCreation() {
             m: 6,
             bgcolor: "white",
             height: "auto",
-            boxShadow: 2,
+             boxShadow: "0 30px 80px rgba(0,0,0,0.11)",
             borderRadius: 3,
             overflow: "hidden"
             
@@ -231,7 +265,7 @@ function ScratchCreation() {
           >
           <Box
             sx={{
-              backgroundColor: "#d3e9f0",
+              backgroundColor: "#9bdbef",
               
               p: 1,
               borderRadius: 2,
@@ -419,7 +453,7 @@ function ScratchCreation() {
             </FormControl>
           
             
-
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <FormControl>
             <FormLabel sx={{color: "black", fontFamily: "sans-serif", fontWeight: "bold", fontSize: "16px"}}>
               Date
@@ -427,15 +461,22 @@ function ScratchCreation() {
                   *
               </Typography>
             </FormLabel>
-            <TextField
-              type="date"
-              // label="Start Date"
-              name="start_date"
-              value={eventInfo.start_date}
-              onChange={handleOnChange}
-              error={!!errors.start_date}
-              helperText={errors.start_date}
-              
+            <DatePicker
+              format="DD/MM/YYYY"
+              value={eventInfo.start_date ? dayjs(eventInfo.start_date) : null}
+              onChange={(newValue) =>
+                setEventInfo((prev) => ({
+                  ...prev,
+                  start_date: newValue ? newValue.format("YYYY-MM-DD") : "",
+                }))
+              }
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!errors.start_date,
+                  helperText: errors.start_date,
+                },
+              }}
             />
             </FormControl>
 
@@ -447,16 +488,23 @@ function ScratchCreation() {
                   *
                 </Typography>
               </FormLabel>
-              <TextField
-                type="time"
-                
-                name="start_time"
-                value={eventInfo.start_time}
-                onChange={handleOnChange}
-                error={!!errors.start_time}
-                helperText={errors.start_time}
-                
-              />
+              <TimePicker
+              value={eventInfo.start_time ? dayjs(`2026-01-01T${eventInfo.start_time}`) : null}
+              onChange={(newValue) =>
+                setEventInfo((prev) => ({
+                  ...prev,
+                  start_time: newValue ? newValue.format("HH:mm") : "",
+                }))
+              }
+              ampm={false}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!errors.start_time,
+                  helperText: errors.start_time,
+                },
+              }}
+            />
             </FormControl>
 
             <FormControl>
@@ -466,35 +514,27 @@ function ScratchCreation() {
                   *
                 </Typography>
               </FormLabel>
-              <TextField
-                type="time"
-                
-                name="end_time"
-                value={eventInfo.end_time}
-                onChange={handleOnChange}
-                error={!!errors.end_time}
-              helperText={errors.end_time}
-                
-              />
+              <TimePicker
+              value={eventInfo.end_time ? dayjs(`2026-01-01T${eventInfo.end_time}`) : null}
+              onChange={(newValue) =>
+                setEventInfo((prev) => ({
+                  ...prev,
+                  end_time: newValue ? newValue.format("HH:mm") : "",
+                }))
+              }
+              ampm={false}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!errors.end_time,
+                  helperText: errors.end_time,
+                },
+              }}
+            />
             </FormControl>
+            </LocalizationProvider>
 
-          
-          {/* this is for uploading image to cloudinary */}
-            {/* <FormControl>
-              <FormLabel 
-              sx={{color: "black", fontFamily: "sans-serif", fontWeight: "bold", fontSize: "16px", pb: "10px"}}
-              >
-                Event Picture
-                
-              </FormLabel>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleUploadImage}
-                              
-              />
-            </FormControl> */}
-          
+                    
             
             <Button 
               type="submit" variant="contained"

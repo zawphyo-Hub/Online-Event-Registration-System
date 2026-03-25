@@ -55,7 +55,8 @@ function TemplatePreview() {
         minHeight: "100vh",
         py: { xs: 3, md: 5 },
         px: { xs: 2, md: 3 },
-        background: "linear-gradient(135deg, rgba(63,162,224,0.10), rgba(70,174,247,0.06))",
+        // background: "linear-gradient(135deg, rgba(63,162,224,0.10), rgba(70,174,247,0.06))",
+        
       }}
     >
       <Box

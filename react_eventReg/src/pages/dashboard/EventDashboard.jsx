@@ -153,7 +153,7 @@ function EventDashboard() {
           </Stack>
         </Paper>
 
-        {/* Loading state */}
+        
         {loading && (
           <Paper
             elevation={0}
@@ -171,7 +171,7 @@ function EventDashboard() {
           </Paper>
         )}
 
-        {/* Empty state */}
+        {/* If there is no event, this will be shown */}
         {!loading && events.length === 0 && (
           <Paper
             elevation={0}
@@ -341,7 +341,7 @@ function EventDashboard() {
                           Location
                         </Typography>
                         <Typography sx={{ fontWeight: 700, color: "#0f172a" }}>
-                          {event.location || "Not specified"}
+                          {event.location }
                         </Typography>
                       </Paper>
                     </Box>

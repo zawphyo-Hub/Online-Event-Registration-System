@@ -155,8 +155,8 @@ function Profile() {
               borderRadius: 4,
               border: "1px solid #e2e8f0",
               bgcolor: "#ffffff",
-              position: "sticky",
-              top: 24,
+              position: { xs: "static", lg: "sticky" },
+              top: { lg: 24 },
             }}
           >
             <Stack spacing={2} alignItems="center">

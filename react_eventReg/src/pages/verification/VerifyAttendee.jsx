@@ -68,7 +68,7 @@ function VerifyAttendee() {
                 <Typography
                     sx={{
                       fontWeight: 900,
-                      color: "error.main",
+                      color: "success.main",
                       fontSize: { xs: "1.3rem", md: "1.5rem" },
                       mb: 1.5,
                     }}
@@ -101,7 +101,7 @@ function VerifyAttendee() {
                       mb: 1.5,
                     }}
                   >
-                    Verification Failed
+                    Verification Failed.
                   </Typography>
 
                   <Typography sx={{ color: "text.secondary", lineHeight: 1.7 }}>

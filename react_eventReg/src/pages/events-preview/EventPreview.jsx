@@ -13,7 +13,8 @@ import { useNavigate } from 'react-router-dom';
 
 function EventPreview(){
   const { slug } = useParams();
-  const [event, setEvent] = useState(null);
+  const [event, setEvent] = useState(null); // current event info
+  const [draftEvent, setDraftEvent] = useState(null); // temporary event info
   const [customizeAction, setCustomizeAction] = useState(false);
 
   // For Google Map auto complete
@@ -25,6 +26,8 @@ function EventPreview(){
     });
 
   const navigate = useNavigate();
+
+  const currentEvent = customizeAction ? draftEvent : event; //display event info when update (draft or current event)
 
  
   // Fetch the event data
@@ -71,21 +74,40 @@ function EventPreview(){
     }
   };
 
+
+  // customize button
+  const handleCustomizeButton = () => {
+    if (!event) return;
+    setDraftEvent({ ...event });
+    setCustomizeAction(true);
+  };
+
+  // cancel button
+  const handleCancelButton = () => {
+    setDraftEvent(null);
+    setCustomizeAction(false);
+  };
+
   // update button
   const handleUpdateButton = async () => {
     try {
       const payLoad = {
-        ...event,
-        location: event.location,          
-        location_lat: event.location_lat,  
-        location_lng: event.location_lng,  
+        ...draftEvent,
+        location: draftEvent.location,          
+        location_lat: draftEvent.location_lat,  
+        location_lng: draftEvent.location_lng,  
       };
       await axios.put(
         `http://localhost:8080/event-registration/events/update/${event.eventId}`,
         payLoad
       );
-      toast.success("Event updated.");
+
+      setEvent(draftEvent);
+      setDraftEvent(null);
       setCustomizeAction(false);
+      toast.success("Event updated.");
+      
+      
     } catch (err) {
       toast.error("Update failed. Error!");
     }
@@ -108,7 +130,7 @@ function EventPreview(){
 
       const imageUrl = res.data.secure_url;
 
-      setEvent((prev) => ({
+      setDraftEvent((prev) => ({
         ...prev,
         event_image_url: imageUrl,
       }));
@@ -132,7 +154,7 @@ function EventPreview(){
 
   
 
-  const template = event.template || {};
+  const template = currentEvent.template || {};
 
   return (
     <Box
@@ -140,7 +162,7 @@ function EventPreview(){
       minHeight: "100vh",
       py: { xs: 3, md: 5 },
       px: { xs: 2, md: 3 },
-      background: "linear-gradient(135deg, rgba(63,162,224,0.10), rgba(70,174,247,0.06))",
+      // background: "linear-gradient(135deg, rgba(63,162,224,0.10), rgba(70,174,247,0.06))",
     }}
   >
     <Box
@@ -154,21 +176,21 @@ function EventPreview(){
         bgcolor: "white",
       }}
     >
-      {(event.event_image_url || template.template_img_url) && (
+      {(currentEvent.event_image_url || template.template_img_url) && (
       <Box sx={{ position: "relative", height: { xs: 240, md: 340 },
-      overflow: "hidden", bgcolor: event.event_image_url ? "rgba(0,0,0,0.04)" : "transparent", }}>
+      overflow: "hidden", bgcolor: currentEvent.event_image_url ? "rgba(0,0,0,0.04)" : "transparent", }}>
         
            
           {/* Main image----------*/}
           <Box
             component="img"
-            src={event.event_image_url || template.template_img_url}
+            src={currentEvent.event_image_url || template.template_img_url}
             alt="Event cover"
             sx={{
               position: "relative",
               width: "100%",
               height: "100%",
-              objectFit: event.event_image_url ? "contain" : "cover",   
+              objectFit: currentEvent.event_image_url ? "contain" : "cover",   
               objectPosition: "center",
             }}
           />
@@ -195,7 +217,7 @@ function EventPreview(){
           }}
         >
           <Typography sx={{ fontWeight: 700, fontSize: { xs: "0.9rem", md: "1.3rem" } }}>
-            {customizeAction ? "Customize your event" : event.event_title}
+            {customizeAction ? "Customize your event" : currentEvent.event_title}
           </Typography>
 
         </Box>
@@ -216,7 +238,7 @@ function EventPreview(){
 
             <input type="file" accept="image/*" onChange={handleUploadImage} />
 
-            {event.event_image_url && (
+            {draftEvent?.event_image_url && (
               <Typography sx={{ mt: 1, color: "success.main", fontSize: "0.9rem" }}>
                 Event image uploaded
               </Typography>
@@ -229,8 +251,8 @@ function EventPreview(){
           <TextField
             fullWidth
             label="Event Title"
-            value={event.event_title}
-            onChange={(e) => setEvent({ ...event, event_title: e.target.value })}
+            value={draftEvent.event_title}
+            onChange={(e) => setDraftEvent({ ...draftEvent, event_title: e.target.value })}
           />
         ) : (
           <Typography
@@ -241,7 +263,7 @@ function EventPreview(){
               lineHeight: 1.15,
             }}
           >
-            {event.event_title}
+            {currentEvent.event_title}
           </Typography>
         )}
 
@@ -253,8 +275,8 @@ function EventPreview(){
             rows={3}
             sx={{ mt: 2 }}
             label="Description"
-            value={event.description}
-            onChange={(e) => setEvent({ ...event, description: e.target.value })}
+            value={draftEvent.description}
+            onChange={(e) => setDraftEvent({ ...draftEvent, description: e.target.value })}
           />
         ) : (
           <Typography
@@ -265,7 +287,7 @@ function EventPreview(){
               maxWidth: 780,
             }}
           >
-            {event.description}
+            {currentEvent.description}
           </Typography>
         )}
 
@@ -305,7 +327,7 @@ function EventPreview(){
               <Typography sx={{ fontWeight: 900, fontSize: "0.95rem" }}>Location</Typography>
 
               <Typography sx={{ color: "text.secondary", mt: 0.6, lineHeight: 1.5 }}>
-                {event.location || "No location selected"}
+                {currentEvent.location || "No location selected"}
               </Typography>
             </Box>
           </Box>
@@ -332,12 +354,12 @@ function EventPreview(){
                   type="date"
                   size="small"
                   sx={{ mt: 1, width: "100%" }}
-                  value={event.start_date || ""}
-                  onChange={(e) => setEvent({ ...event, start_date: e.target.value })}
+                  value={draftEvent.start_date || ""}
+                  onChange={(e) => setDraftEvent({ ...draftEvent, start_date: e.target.value })}
                 />
               ) : (
                 <Typography sx={{ color: "text.secondary", mt: 0.6, lineHeight: 1.5 }}>
-                  {event.start_date}
+                  {currentEvent.start_date}
                 </Typography>
               )}
             </Box>
@@ -366,21 +388,21 @@ function EventPreview(){
                     size="small"
                     label="Start"
                     sx={{ flex: 1 }}
-                    value={event.start_time || ""}
-                    onChange={(e) => setEvent({ ...event, start_time: e.target.value })}
+                    value={draftEvent.start_time || ""}
+                    onChange={(e) => setDraftEvent({ ...draftEvent, start_time: e.target.value })}
                   />
                   <TextField
                     type="time"
                     size="small"
                     label="End"
                     sx={{ flex: 1 }}
-                    value={event.end_time || ""}
-                    onChange={(e) => setEvent({ ...event, end_time: e.target.value })}
+                    value={draftEvent.end_time || ""}
+                    onChange={(e) => setDraftEvent({ ...draftEvent, end_time: e.target.value })}
                   />
                 </Box>
               ) : (
                 <Typography sx={{ color: "text.secondary", mt: 0.6, lineHeight: 1.5 }}>
-                  {event.start_time} - {event.end_time}
+                  {currentEvent.start_time} - {currentEvent.end_time}
                 </Typography>
               )}
             </Box>
@@ -390,7 +412,7 @@ function EventPreview(){
         </Box>
 
         {/* ---------Google map auto complete-------- */}
-        {event.location_lat && event.location_lng && (
+        {currentEvent.location_lat && currentEvent.location_lng && (
           <Box sx={{ mt: 2.2 }}>
             <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} libraries={["places"]}>
             {customizeAction && (
@@ -400,7 +422,7 @@ function EventPreview(){
                 </Typography>
                 <GoogleMapLocation
                   inputRef={inputRef}
-                  setEvent={setEvent}
+                  setEvent={setDraftEvent}
                   setDefaultLocationMarker={setDefaultLocationMarker}
                 />
               </Box>
@@ -409,11 +431,11 @@ function EventPreview(){
             <Box sx={{ height: 320, width: "100%", borderRadius: 3, overflow: "hidden", border: "1px solid rgba(0,0,0,0.08)" }}>
               
                 <Map
-                  center={{ lat: event.location_lat, lng: event.location_lng }}
+                  center={{ lat: currentEvent.location_lat, lng: currentEvent.location_lng }}
                   defaultZoom={14}
                   mapId={import.meta.env.VITE_MAP_ID}
                 >
-                  <AdvancedMarker position={{ lat: event.location_lat, lng: event.location_lng }}>
+                  <AdvancedMarker position={{ lat: currentEvent.location_lat, lng: currentEvent.location_lng }}>
                     <Pin background="white" borderColor="purple" glyphColor="purple" />
                   </AdvancedMarker>
                 </Map>
@@ -435,17 +457,17 @@ function EventPreview(){
               multiline
               rows={2}
               placeholder="Enter additional information."
-              value={event.additionalNote || ""}
-              onChange={(e) => setEvent({ ...event, additionalNote: e.target.value })}
+              value={draftEvent.additionalNote || ""}
+              onChange={(e) => setDraftEvent({ ...draftEvent, additionalNote: e.target.value })}
               slotProps={{ htmlInput: { maxLength: 100 } }}
             />
           </Box>
         ) : (
-          event.additionalNote?.trim() && (
+          currentEvent.additionalNote?.trim() && (
             <Box sx={{ mt: 2.5 }}>
               <Typography sx={{ fontWeight: 900 }}>Additional Note</Typography>
               <Typography sx={{ color: "text.secondary", mt: 0.5 }}>
-                {event.additionalNote}
+                {currentEvent.additionalNote}
               </Typography>
             </Box>
           )
@@ -467,7 +489,7 @@ function EventPreview(){
             <>
               <Button
                 variant="outlined"
-                onClick={() => setCustomizeAction(true)}
+                onClick={handleCustomizeButton}
                 sx={{ borderRadius: 2.2, fontWeight: 800 }}
               >
                 Customize
@@ -495,7 +517,7 @@ function EventPreview(){
 
               <Button
                 variant="outlined"
-                onClick={() => setCustomizeAction(false)}
+                onClick={handleCancelButton}
                 sx={{ borderRadius: 2.2, fontWeight: 800 }}
               >
                 Cancel
