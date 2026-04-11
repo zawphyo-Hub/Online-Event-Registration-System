@@ -11,6 +11,7 @@ function TwoFactorQrImage(){
   const { twoFaQr, email} = location.state || {};
 
   const [verificationCode, setVerificationCode] = useState('');
+  const [verificationCodeError, setVerificationCodeError] = useState('');
 
   const handleNumberOnly = (e) => {
         const numberValue = e.target.value.replace(/\D/g, ""); // restricted to number only
@@ -18,7 +19,32 @@ function TwoFactorQrImage(){
         
     };
 
+  const validateInputs = () => {
+    let isValid = true;
+
+   
+    // ---- Email Error Message ----
+    if(!verificationCode){
+      setVerificationCodeError("Verification code is required.");
+      isValid = false;
+    }
+    else{
+      setVerificationCodeError("");
+    }
+
+    
+  return isValid;
+
+  }
+
   const handleVerify = async () => {
+
+    const isValid = validateInputs();
+
+      if (!isValid) {
+        return;
+      }
+
     try {
       const res = await axios.post("http://localhost:8080/EventApi/authentication/verification", {
         email,
@@ -115,6 +141,8 @@ function TwoFactorQrImage(){
                     label="6-digit code"
                     variant="outlined"
                     value={verificationCode}
+                    helperText={verificationCodeError}
+                    error={Boolean(verificationCodeError)}
                     onChange={handleNumberOnly}
                     sx={{ m:3}}
                 />

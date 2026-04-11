@@ -5,6 +5,7 @@ import logo from "../../assets/logo3.png";
 import MenuIconImg from "../../assets/menu1.png";
 import RemoveIconImg from "../../assets/cancel.png";
 import UserIcon from "../../assets/user2.png";
+import PlusIcon from "../../assets/plus2.png";
 
 
 function Navbar() {
@@ -23,9 +24,41 @@ function Navbar() {
         Verification
       </Button>
 
-      <Button component={Link} to="/template-selection" sx={{ color: "black", fontWeight: 600 }} onClick={onClick}>
-        Create Events
+      <Button
+        component={Link}
+        to="/template-selection"
+        sx={{
+          color: "white",
+          fontWeight: 700,
+          px: 2.2,
+          py: 1,
+          borderRadius: 2.5,
+          textTransform: "none",
+          background: "linear-gradient(135deg, #77a5ef, #0ea5e9)",
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          "&:hover": {
+            background: "linear-gradient(135deg, #2563eb, #0284c7)",
+            boxShadow: "0 6px 18px rgba(14,165,233,0.35)",
+          },
+        }}
+      >
+        Create Event
+
+        <Box
+          component="img"
+          src={PlusIcon}
+          alt="Add"
+          sx={{
+            width: 18,
+            height: 18,
+            objectFit: "contain",
+          }}
+        />
       </Button>
+
+      
       
       
     </>
@@ -53,10 +86,13 @@ function Navbar() {
         
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
           <NavButtons />
+
         </Box>
 
         
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+
+          
           
           <IconButton
             component={Link}
@@ -67,7 +103,7 @@ function Navbar() {
               component="img"
               src={UserIcon}
               alt="Profile"
-              sx={{ height: 25, width: 25}}
+              sx={{ height: 22, width: 22}}
             />
           </IconButton>
 

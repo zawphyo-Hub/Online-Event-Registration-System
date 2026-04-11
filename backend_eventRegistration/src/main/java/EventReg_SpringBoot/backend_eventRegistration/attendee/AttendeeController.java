@@ -103,4 +103,14 @@ public class AttendeeController {
         );
     }
 
+    // search attendee in dashboard
+    @GetMapping("/search/{eventId}")
+    public ResponseEntity<List<Attendee>> searchAttendees(
+            @PathVariable Long eventId,
+            @RequestParam String keyword
+    ) {
+        List<Attendee> attendees = attendeeService.searchAttendees(eventId, keyword);
+        return ResponseEntity.ok(attendees);
+    }
+
 }

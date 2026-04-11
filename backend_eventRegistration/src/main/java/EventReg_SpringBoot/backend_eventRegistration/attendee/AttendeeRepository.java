@@ -14,8 +14,22 @@ public interface AttendeeRepository extends JpaRepository<Attendee, Long> {
     List<Attendee> findByEvent_EventId(Long Id);
     Optional<Attendee> findBySecretKey(String secretKey);
 
+    @Query("""
+        SELECT a FROM Attendee a
+        WHERE a.event.eventId = :eventId
+        AND (
+            LOWER(a.firstName) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            OR LOWER(a.lastName) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            OR LOWER(a.email) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        )
+    """)
+    List<Attendee> findAttendeeByNameEmail(
+            @Param("eventId") Long eventId,
+            @Param("keyword") String keyword
+    );
+
     @Modifying
     @Query("DELETE FROM Attendee a WHERE a.event.eventId = :eventId")
-    void deleteByEvent_EventId(@Param("eventId") Long eventId); // to delete attendee when event is removed.
+    void deleteByEvent_EventId(@Param("eventId") Long eventId); //  delete attendee when event is removed.
 
 }

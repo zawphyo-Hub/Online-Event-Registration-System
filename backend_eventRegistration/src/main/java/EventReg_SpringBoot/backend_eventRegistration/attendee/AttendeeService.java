@@ -15,4 +15,6 @@ public interface AttendeeService {
     List<Attendee> getAttendeesByEvent(Long Id);
     Attendee getAttendeeBySecretKey(String secretKey);
 
+    List<Attendee> searchAttendees(Long eventId, String keyword);
+
 }

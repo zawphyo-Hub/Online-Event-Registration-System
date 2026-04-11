@@ -156,6 +156,30 @@ function EventPreview(){
 
   const template = currentEvent.template || {};
 
+  // date and time format for better reading
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }).replace(/ /g, "-");
+  };
+
+  const formatTime = (timeString) => {
+    if (!timeString) return "";
+
+    const [hours, minutes] = timeString.split(":");
+
+    const period = Number(hours) < 12 ? "am" : "pm";
+
+    return `${Number(hours)}:${minutes} ${period}`;
+  };
+
+
   return (
     <Box
     sx={{
@@ -359,7 +383,7 @@ function EventPreview(){
                 />
               ) : (
                 <Typography sx={{ color: "text.secondary", mt: 0.6, lineHeight: 1.5 }}>
-                  {currentEvent.start_date}
+                  {formatDate(currentEvent.start_date)}
                 </Typography>
               )}
             </Box>
@@ -402,7 +426,7 @@ function EventPreview(){
                 </Box>
               ) : (
                 <Typography sx={{ color: "text.secondary", mt: 0.6, lineHeight: 1.5 }}>
-                  {currentEvent.start_time} - {currentEvent.end_time}
+                  {formatTime(currentEvent.start_time)} - {formatTime(currentEvent.end_time)}
                 </Typography>
               )}
             </Box>

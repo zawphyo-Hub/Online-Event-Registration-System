@@ -58,5 +58,11 @@ public class AttendeeServiceImpl implements AttendeeService{
         return attendeeRepository.findBySecretKey(secretKey).orElse(null);
     }
 
+    // search attendees
+    @Override
+    public List<Attendee> searchAttendees(Long eventId, String keyword) {
+        return attendeeRepository.findAttendeeByNameEmail(eventId, keyword);
+    }
+
 
 }

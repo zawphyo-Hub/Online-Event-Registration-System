@@ -69,6 +69,30 @@ function EventDashboard() {
     }
   };  
 
+  // date and time format for better reading
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }).replace(/ /g, "-");
+  };
+
+  const formatTime = (timeString) => {
+    if (!timeString) return "";
+
+    const [hours, minutes] = timeString.split(":");
+
+    const period = Number(hours) < 12 ? "am" : "pm";
+
+    return `${Number(hours)}:${minutes} ${period}`;
+  };
+
+
   return (
     <Box sx={{ minHeight: "100vh"}}>
       <Navbar />
@@ -307,7 +331,7 @@ function EventDashboard() {
                           Date
                         </Typography>
                         <Typography sx={{ fontWeight: 700, color: "#0f172a" }}>
-                          {event.start_date}
+                          {formatDate(event.start_date)}
                         </Typography>
                       </Paper>
 
@@ -324,7 +348,7 @@ function EventDashboard() {
                           Time
                         </Typography>
                         <Typography sx={{ fontWeight: 700, color: "#0f172a" }}>
-                          {event.start_time} - {event.end_time}
+                          {formatTime(event.start_time)} - {formatTime(event.end_time)}
                         </Typography>
                       </Paper>
 

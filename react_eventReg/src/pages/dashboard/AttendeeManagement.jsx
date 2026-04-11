@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import {Box, Typography, Card, Table, TableHead, TableRow, TableCell, TableBody, Button, 
-  TextField, Select, MenuItem, Paper, Stack, Divider, TableContainer} from "@mui/material";
+  TextField, Select, MenuItem, Paper, Stack, Divider, TableContainer, InputAdornment} from "@mui/material";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Navbar from "../navbar/Navbar";
+import SearchIcon from "../../assets/search.png";
 
 function AttendeeManagement() {
   const { eventId } = useParams();
@@ -17,6 +18,7 @@ function AttendeeManagement() {
     isVerified: false
     
   });
+  const [searchAttendees, setSearchAttendees] = useState(""); // 
 
   const fetchAttendees = async () => {
     try {
@@ -66,6 +68,34 @@ function AttendeeManagement() {
       toast.error("Error Deleting Attendee!");
     }
   };
+
+  const handleSearchButton = async () => {
+    if (!searchAttendees.trim()) {
+      fetchAttendees();
+      return;
+    }
+
+    
+
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/attendees/search/${eventId}?keyword=${encodeURIComponent(searchAttendees)}`
+      );
+      setAttendees(res.data);
+      if (res.data.length === 0) {
+        toast.info("No attendee found.");
+      }
+    } catch (error) {
+      toast.error("Error searching attendees.");
+    }
+  };
+
+  // if search bar empty, show all attendees
+  useEffect(() => {
+    if (!searchAttendees.trim()) {
+      fetchAttendees();
+    }
+  }, [searchAttendees]);
 
   return (
     <Box>
@@ -144,6 +174,53 @@ function AttendeeManagement() {
               </Paper>
             </Box>
           </Box>
+
+          <Box
+            sx={{
+              mb: 3,
+              width: "98%",
+              bgcolor: "#fff",
+              borderRadius: 3,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              p: 1,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+              flexDirection: { xs: "column", sm: "row" },
+            }}
+          >
+            <TextField
+              variant="standard"
+              placeholder="Enter attendee name or email"
+              value={searchAttendees}
+              onChange={(e) => setSearchAttendees(e.target.value)}
+              fullWidth
+              slotProps={{
+                disableUnderline: true,
+              }}
+              sx={{
+                px: 1,
+                
+              }}
+            />
+
+            <Button
+              variant="contained"
+              onClick={handleSearchButton}
+              sx={{
+                minWidth: { xs: "100%", sm: 120 },
+                borderRadius: 2,
+                textTransform: "none",
+                fontWeight: 600,
+                py: 1,
+                
+              }}
+            >
+              Search
+            </Button>
+          </Box>
+
+          
 
           {/* -------------------Desktop and tablet size */}
           <Box sx={{ display: { xs: "none", md: "block" } }}>

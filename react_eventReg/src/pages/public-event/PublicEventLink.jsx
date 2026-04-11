@@ -41,6 +41,29 @@ function PublicEventLink() {
 
   const template = event.template || {};
 
+  // date and time format for better reading
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }).replace(/ /g, "-");
+  };
+
+  const formatTime = (timeString) => {
+    if (!timeString) return "";
+
+    const [hours, minutes] = timeString.split(":");
+
+    const period = Number(hours) < 12 ? "am" : "pm";
+
+    return `${Number(hours)}:${minutes} ${period}`;
+  };
+
   return (
       
     <Box
@@ -176,7 +199,7 @@ function PublicEventLink() {
               <Box>
                 <Typography sx={{ fontWeight: 900, fontSize: "0.95rem" }}>Date</Typography>
                 <Typography sx={{ color: "text.secondary", mt: 0.4, lineHeight: 1.5 }}>
-                  {event.start_date}
+                  {formatDate(event.start_date)}
                 </Typography>
               </Box>
             </Box>
@@ -197,7 +220,7 @@ function PublicEventLink() {
               <Box>
                 <Typography sx={{ fontWeight: 900, fontSize: "0.95rem" }}>Time</Typography>
                 <Typography sx={{ color: "text.secondary", mt: 0.4, lineHeight: 1.5 }}>
-                  {event.start_time} - {event.end_time}
+                  {formatTime(event.start_time)} - {formatTime(event.end_time)}
                 </Typography>
               </Box>
             </Box>
