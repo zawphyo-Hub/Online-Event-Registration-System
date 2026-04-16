@@ -3,6 +3,7 @@ import { Html5Qrcode } from "html5-qrcode";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
+import { toast } from "react-toastify";
 import logo from "../../assets/logo3.png";
 
 function VerificationBuiltIn() {
@@ -42,12 +43,21 @@ function VerificationBuiltIn() {
     if (!file) return;
 
     const html5QrCode = new Html5Qrcode("qr-reader");
+
     try {
-      const decodedText = await html5QrCode.scanFile(file, true);
-      handleScanResult(decodedText);
+      const decodedText = await html5QrCode.scanFile(file, false);
+
+      const secretKey = decodedText.split("/verify-attendee/")[1];
+
+      if (secretKey) {
+        navigate(`/verify-attendee/${secretKey}`);
+      }
     } catch (err) {
-      console.error("Image scan failed.", err);
+      toast.error("Please upload a valid QR code.");
+     
     }
+
+    e.target.value = "";
   };
 
   return (

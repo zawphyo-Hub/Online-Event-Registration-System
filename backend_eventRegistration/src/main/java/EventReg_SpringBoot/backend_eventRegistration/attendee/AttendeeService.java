@@ -1,6 +1,6 @@
 package EventReg_SpringBoot.backend_eventRegistration.attendee;
 
-import EventReg_SpringBoot.backend_eventRegistration.event.Event;
+//import EventReg_SpringBoot.backend_eventRegistration.event.Event;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

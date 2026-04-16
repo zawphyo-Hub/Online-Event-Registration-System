@@ -3,6 +3,7 @@ package EventReg_SpringBoot.backend_eventRegistration.event;
 import EventReg_SpringBoot.backend_eventRegistration.template.Template;
 import EventReg_SpringBoot.backend_eventRegistration.user.User;
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -16,6 +16,7 @@ function EventPreview(){
   const [event, setEvent] = useState(null); // current event info
   const [draftEvent, setDraftEvent] = useState(null); // temporary event info
   const [customizeAction, setCustomizeAction] = useState(false);
+  const [errors, setErrors] = useState({});
 
   // For Google Map auto complete
   const inputRef = useRef(null);
@@ -74,6 +75,38 @@ function EventPreview(){
     }
   };
 
+  // validate update data before saving
+  const validateEventPreview = () => {
+    const newErrors = {};
+    let isValid = true;
+
+
+    // Title validation
+    if (!draftEvent?.event_title || draftEvent.event_title.trim() === "") {
+      newErrors.event_title = "Title is required.";
+      isValid = false;
+    }
+
+    // Description validation
+    if (!draftEvent?.description || draftEvent.description.trim() === "") {
+      newErrors.description = "Description is required.";
+      isValid = false;
+    }
+
+    if (draftEvent?.start_date) {
+      const selectedDate = new Date(draftEvent.start_date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        newErrors.start_date = "Start date must not be in the past.";
+        isValid = false;
+      }
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   // customize button
   const handleCustomizeButton = () => {
@@ -90,6 +123,8 @@ function EventPreview(){
 
   // update button
   const handleUpdateButton = async () => {
+
+    if (!validateEventPreview()) return;
     try {
       const payLoad = {
         ...draftEvent,
@@ -277,6 +312,8 @@ function EventPreview(){
             label="Event Title"
             value={draftEvent.event_title}
             onChange={(e) => setDraftEvent({ ...draftEvent, event_title: e.target.value })}
+            error={!!errors.event_title}
+            helperText={errors.event_title}
           />
         ) : (
           <Typography
@@ -301,6 +338,8 @@ function EventPreview(){
             label="Description"
             value={draftEvent.description}
             onChange={(e) => setDraftEvent({ ...draftEvent, description: e.target.value })}
+            error={!!errors.description}
+            helperText={errors.description}
           />
         ) : (
           <Typography
@@ -379,7 +418,12 @@ function EventPreview(){
                   size="small"
                   sx={{ mt: 1, width: "100%" }}
                   value={draftEvent.start_date || ""}
-                  onChange={(e) => setDraftEvent({ ...draftEvent, start_date: e.target.value })}
+                  onChange={(e) => {
+                    setDraftEvent({ ...draftEvent, start_date: e.target.value });
+                     setErrors((prev) => ({ ...prev, start_date: "" }));
+                  }}
+                  error={!!errors.start_date}
+                  helperText={errors.start_date}
                 />
               ) : (
                 <Typography sx={{ color: "text.secondary", mt: 0.6, lineHeight: 1.5 }}>

@@ -47,14 +47,14 @@ function ForgotPw() {
         `http://localhost:8080/users/forgot-password?email=${email}`
       );
 
-      toast.success("We've send you a reset link.");
+      toast.success("We've sent you a reset link.");
       navigate("/login");
       
     } catch (error) {
       if(error.response && error.response.data && error.response.data.message){
           toast.error(error.response.data.message)
        }else{
-          toast.error("Eror Reset Link.")
+          toast.error("Error Reset Link.")
 
        }
        

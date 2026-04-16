@@ -18,7 +18,8 @@ function AttendeeManagement() {
     isVerified: false
     
   });
-  const [searchAttendees, setSearchAttendees] = useState(""); // 
+  const [searchAttendees, setSearchAttendees] = useState(""); 
+  const [errors, setErrors] = useState({}); // show error empty fields
 
   const fetchAttendees = async () => {
     try {
@@ -37,6 +38,7 @@ function AttendeeManagement() {
 
   const handleEditAttendees = (attendee) => {
     setEditAttendeeId(attendee.attendee_id);
+    setErrors({});
     setEditedAttendee({
       firstName: attendee.firstName,
       lastName: attendee.lastName,
@@ -46,6 +48,8 @@ function AttendeeManagement() {
   };
 
   const handleUpdateAttendees = async (id) => {
+
+    if (!validateAttendee()) return;
     try {
       await axios.put(`http://localhost:8080/attendees/update/${id}`, editedAttendee);
       toast.success("Attendee updated.");
@@ -69,13 +73,46 @@ function AttendeeManagement() {
     }
   };
 
+  const validateAttendee = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    // first name
+    if (!editedAttendee.firstName || editedAttendee.firstName.trim() === "") {
+      newErrors.firstName = "First name is required.";
+      isValid = false;
+    }
+
+    // last name
+    if (!editedAttendee.lastName || editedAttendee.lastName.trim() === "") {
+      newErrors.lastName = "Last name is required.";
+      isValid = false;
+    }
+
+    // Email
+    if (!editedAttendee.email || editedAttendee.email.trim() === "") {
+      newErrors.email = "Email is required.";
+      isValid = false;
+    } else {
+    // Email format check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(editedAttendee.email)) {
+      newErrors.email = "Invalid email.";
+      isValid = false;
+    }
+  }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleSearchButton = async () => {
     if (!searchAttendees.trim()) {
       fetchAttendees();
       return;
     }
 
-    
 
     try {
       const res = await axios.get(
@@ -259,6 +296,8 @@ function AttendeeManagement() {
                                 })
                               }
                               size="small"
+                              error={!!errors.firstName}
+                              helperText={errors.firstName}
                             />
                           ) : (
                             attendee.firstName
@@ -276,6 +315,8 @@ function AttendeeManagement() {
                                 })
                               }
                               size="small"
+                              error={!!errors.lastName}
+                              helperText={errors.lastName}
                             />
                           ) : (
                             attendee.lastName
@@ -294,6 +335,8 @@ function AttendeeManagement() {
                                 })
                               }
                               size="small"
+                              error={!!errors.email}
+                              helperText={errors.email}
                             />
                           ) : (
                             attendee.email
