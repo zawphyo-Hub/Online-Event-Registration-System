@@ -18,21 +18,12 @@ The platform provides an efficient and user-friendly solution for event organize
 - Built-in attendee verification functionality.
 
 ## Technologies Used
-
-### Frontend
-- React.js
-- HTML, CSS, JavaScript
-
-### Backend
+- React.js | Javascript
 - Spring Boot
-- Spring Security
-- OAuth2 Client
-- Java Mail Service
-
-### Database
 - PostgreSQL
 
 ### External Services
 - Google Maps API
+- Cloudinary 
 - Google OAuth2 Authentication
 - Email Service
